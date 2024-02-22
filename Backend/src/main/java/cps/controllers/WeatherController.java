@@ -5,6 +5,7 @@ import cps.services.WeatherDBService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RequestMapping("api")
 public class WeatherController {
     private final WeatherDBService weatherDBService;

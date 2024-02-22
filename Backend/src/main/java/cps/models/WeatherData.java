@@ -2,7 +2,6 @@ package cps.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
 @Data
 @Entity
 @Table(name = "Weather")
