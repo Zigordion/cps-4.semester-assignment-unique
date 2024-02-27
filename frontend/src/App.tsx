@@ -9,9 +9,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <WeatherComponent/>
-        <CityComponent cityName="test"/>
         <CityComponent cityName="odense"/>
-        
       </header>
     </div>
   );

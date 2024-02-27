@@ -9,7 +9,7 @@ const WeatherComponent: React.FC = (props) => {
     useEffect(()=>{
         const fetchWeatherData = async()=>{
             try{
-                const response = await axios.get('http://localhost:8020/api/weather/1')
+                const response = await axios.get('http://localhost:8020/api/weather/temp')
                 console.log(response);
                 setWeatherData(response.data);
             } catch (error){
@@ -18,10 +18,9 @@ const WeatherComponent: React.FC = (props) => {
         }
         fetchWeatherData();
     },  []);
-    console.log(weatherData);
     return (
         <div>
-            <h1>hello</h1> 
+            <h3>Temperature {weatherData}</h3> 
         </div>
     )
 }

@@ -2,6 +2,7 @@ package cps.services;
 
 import cps.models.WeatherData;
 import cps.repositories.WeatherDataRepository;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -32,9 +33,22 @@ public class WeatherDBService {
     }
 // API key to dmi: 4ed024e9-49f9-4286-b988-5c97597774db
 //4046b36a-f328-471f-91db-0249dbf703d3
-    public void callExternalAPI(){
-        URI uri = UriComponentsBuilder.fromUriString("https://dmigw.govcloud.dk/v1/forecastdata")
-                .queryParam("api-key", "4ed024e9-49f9-4286-b988-5c97597774db")
+//        URI uri = UriComponentsBuilder.fromUriString("https://dmigw.govcloud.dk/v1/forecastdata")
+//                .queryParam("api-key", "4ed024e9-49f9-4286-b988-5c97597774db")
+//                .build()
+//                .toUri();
+//        HttpRequest request = HttpRequest.newBuilder()
+//                .uri(uri)
+//                .GET()
+//                .build();
+    //https://dmigw.govcloud.dk/v2/metObs/collections/observation/items?period=latest-10-minutes&parameterId=temp_dry&bbox=9.938,55.2629,10.8478,55.6235&api-key=03c12439-02f5-45e5-92c1-8e633abfa088
+    public double getTempFromExternalAPI(){
+
+        URI uri = UriComponentsBuilder.fromUriString("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items")
+                .queryParam("period","latest-10-minutes")
+                .queryParam("parameterId","temp_dry")
+                .queryParam("bbox","9.938,55.2629,10.8478,55.6235")
+                .queryParam("api-key","03c12439-02f5-45e5-92c1-8e633abfa088")
                 .build()
                 .toUri();
         HttpRequest request = HttpRequest.newBuilder()
@@ -48,7 +62,9 @@ public class WeatherDBService {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(response.body());
+        double tempValue = new JSONObject(response.body()).getJSONArray("features").getJSONObject(0).getJSONObject("properties").getDouble("value");
+        System.out.println(tempValue);
+       return tempValue;
     }
 
 }

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-@RequestMapping("api")
+@RequestMapping("api/weather")
 public class WeatherController {
     private final WeatherDBService weatherDBService;
 
@@ -14,17 +14,17 @@ public class WeatherController {
         this.weatherDBService = weatherDBService;
     }
 
-    @GetMapping("/weather/{id}")
+    @GetMapping("/{id}")
     public WeatherData getWeatherData(@PathVariable Long id){
         //Tmp Method
         return weatherDBService.getWeatherData(id);
     }
-    @GetMapping("/weather")
-    public void PrintWeatherData(){
+    @GetMapping("/temp")
+    public double PrintWeatherData(){
         //tmp method
-        weatherDBService.callExternalAPI();
+        return weatherDBService.getTempFromExternalAPI();
     }
-    @PostMapping("/weather")
+    @PostMapping("/")
     public void addWeatherData(@RequestBody WeatherData weatherData){
         //Tmp Method
         weatherDBService.addWeatherToDB(weatherData);

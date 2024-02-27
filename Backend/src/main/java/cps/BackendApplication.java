@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @SpringBootApplication
 @EntityScan(basePackages = "cps.models")
 @EnableJpaRepositories(basePackages = "cps.repositories")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class BackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
