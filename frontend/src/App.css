@@ -1,9 +1,13 @@
+*{
+  box-sizing: border-box;
+}
+
+
 .App{
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
@@ -11,13 +15,25 @@
 
 .display-overview{
   display:flex;
+  flex: 33%;
+  
 }
 .weather-component-container{
-  flex: 33%;
+display: flex;
+flex-direction: column;
+align-items: center;
+flex: 30%;
 }
 
 .bottom-page{
   background-color: aqua;
   flex: 100%;
 
+}
+
+
+@media (max-width: 1000px) {
+  .display-overview {
+    flex-direction: column;
+  }
 }
