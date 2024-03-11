@@ -1,15 +1,19 @@
 import React,{useEffect, useState} from 'react'
 import axios from 'axios'
+import './WeatherComponent.css'
 interface WeatherComponentProps{
-    name: string;
+    apiEndpoint: string;
+    valueName: string;
+    imagePath:string;
+    altText: string;
 }
-const WeatherComponent: React.FC = (props) => {
+const WeatherComponent = ({apiEndpoint, valueName, imagePath, altText} : WeatherComponentProps ) => {
     
     const [weatherData, setWeatherData] = useState<any>(null);
     useEffect(()=>{
         const fetchWeatherData = async()=>{
             try{
-                const response = await axios.get('http://localhost:8020/api/weather/temp')
+                const response = await axios.get('http://localhost:8020/api/weather/' + apiEndpoint)
                 console.log(response);
                 setWeatherData(response.data);
             } catch (error){
@@ -19,8 +23,9 @@ const WeatherComponent: React.FC = (props) => {
         fetchWeatherData();
     },  []);
     return (
-        <div>
-            <h3>Temperature {weatherData}</h3> 
+        <div className='weather-component'>
+            <h3>{valueName} {weatherData}</h3>
+            <img height={50} className='weather-icon' src={imagePath} alt={altText}></img>
         </div>
     )
 }

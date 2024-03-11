@@ -1,16 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import WeatherComponent from './components/WeatherComponent';
-import CityComponent from './components/CityComponent';
+import temperatureImage from "./images/temperature.png";
+import CenterComponent from './components/CenterComponent';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <WeatherComponent/>
-        <CityComponent cityName="odense"/>
-      </header>
+      <div className='display-overview'>
+            <div className='weather-component-container'>
+              <WeatherComponent valueName='Temperature' apiEndpoint='temp' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+            </div>
+            <CenterComponent/>
+            <div className='weather-component-container'>
+              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+            </div>
+      </div>
+      
     </div>
   );
 }
