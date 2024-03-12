@@ -22,8 +22,7 @@ const CenterComponent = () => {
 
   return (
     <div className='container'>
-        <h1>Odense</h1>
-        <h1>Vejrudsigt</h1>
+        <h1>Odense<br/>Vejrudsigt</h1>
         <h1>{timeData}</h1>
     </div>
   )
