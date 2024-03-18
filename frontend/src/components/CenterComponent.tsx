@@ -10,8 +10,6 @@ import windyImage from "../images/mainIcons/Windy.png";
 
 const CenterComponent = () => {
 
-let overallImage;
-
   const [timeData, setTimeData] = useState<number>();
   useEffect(()=>{
       const fetchTimeData = async()=>{
@@ -28,34 +26,31 @@ let overallImage;
 
 
 
-const [overallData, setOverallData] = useState<number>();
+const [overallImage, setOverallImage] = useState<string>();
 useEffect(()=>{
+    let overallData: number;
     const fetchOverall = async()=>{
         try{
             const response = await axios.get('http://localhost:8020/api/weather/overall')
             console.log(response.data);
-            setOverallData(response.data);
+            overallData = response.data;
         } catch (error){
             console.error("Error while fetching overall weather data", error);
         }
-    }
-        fetchOverall();
-
         if (overallData == 1) {
-            overallImage = rainyImage;
+            setOverallImage(rainyImage);
         } else if (overallData == 2) {
-            overallImage = windyImage;
+            setOverallImage(windyImage);
         } else if (overallData == 3) {
-            overallImage = cloudyImage;
+            setOverallImage(cloudyImage);
         } else {
-            overallImage = sunnyImage;
+            setOverallImage(sunnyImage);
         }
-        
-       
+    }
+    fetchOverall();
+
+    
 }, [])
-
-
-
   return (
     <div className='container'>
         <h1>Odense<br/>Vejrudsigt</h1>
