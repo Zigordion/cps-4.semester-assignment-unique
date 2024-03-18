@@ -29,8 +29,8 @@ public class WeatherController {
         weatherDBService.addWeatherToDB(weatherData);
     }
     @GetMapping("/time")
-    public double PrintTimeData(){
+    public String PrintTimeData(){
         //tmp method
-        return 1;
+        return "1";
     }
 }

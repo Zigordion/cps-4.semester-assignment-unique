@@ -12,33 +12,36 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpClient;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Map;
 
 @Service
 public class WeatherDBService {
     WeatherDataRepository weatherDataRepository;
-    public WeatherDBService(WeatherDataRepository weatherDataRepository){
+
+    public WeatherDBService(WeatherDataRepository weatherDataRepository) {
         //Dependency injection. This repository is created automatically by spring
         this.weatherDataRepository = weatherDataRepository;
     }
 
-    public void addWeatherToDB(WeatherData weatherData){
+    public void addWeatherToDB(WeatherData weatherData) {
         //TMP method
         weatherDataRepository.save(weatherData);
     }
-    public WeatherData getWeatherData(Long id){
+
+    public WeatherData getWeatherData(Long id) {
         WeatherData weatherData = weatherDataRepository.findById(id).orElse(new WeatherData());
         return weatherDataRepository.findById(id).orElse(null);
     }
 
-    public WeatherData getCurrentWeatherData(){
+    public WeatherData getCurrentWeatherData() {
         //if weather data already exists in database for the given time stamp then send that instead
         WeatherData weatherData = new WeatherData();
-        weatherData.setTemperature(getTemperatureExternalAPI());
+        weatherData.setTemperature(0);
         weatherData.setWindSpeed(0);
         weatherData.setWindDirection(0);
         weatherData.setSunMin(0);
         weatherData.setCloudCoverage(0);
-        weatherData.setHumidity(getHumidityExternalAPI());
+        weatherData.setHumidity(0);
         weatherData.setRain(0);
         weatherData.setSolarRad(0);
         weatherData.setTimestamp(new Timestamp(0));
@@ -55,37 +58,37 @@ public class WeatherDBService {
 //                .GET()
 //                .build();
     //https://dmigw.govcloud.dk/v2/metObs/collections/observation/items?period=latest-10-minutes&parameterId=temp_dry&bbox=9.938,55.2629,10.8478,55.6235&api-key=03c12439-02f5-45e5-92c1-8e633abfa088
-    public double getTemperatureExternalAPI(){
-        URI uri = constructURIForExternalAPI("temp_dry");
-        return getValue(uri);
-    }
-    public double getHumidityExternalAPI(){
-        URI uri = constructURIForExternalAPI("humidity");
-        return getValue(uri);
-    }
-    private URI constructURIForExternalAPI(String parameterId){
-        return UriComponentsBuilder.fromUriString("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items")
-                .queryParam("period","latest-10-minutes")
-                .queryParam("parameterId",parameterId)
-                .queryParam("bbox","9.938,55.2629,10.8478,55.6235")
-                .queryParam("api-key","03c12439-02f5-45e5-92c1-8e633abfa088")
+
+    private Map<String, Double> constructURIForExternalAPI() {
+        URI uri = UriComponentsBuilder.fromUriString("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items")
+                .queryParam("period", "latest-10-minutes")
+                .queryParam("bbox", "9.938,55.2629,10.8478,55.6235")
+                .queryParam("api-key", "03c12439-02f5-45e5-92c1-8e633abfa088")
                 .build()
                 .toUri();
-    }
-
-    private double getValue(URI uri){
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
                 .GET()
                 .build();
         HttpResponse<String> response = null;
-        try{
-            response = HttpClient.newHttpClient().send(request,HttpResponse.BodyHandlers.ofString());
+        try {
+            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        return new JSONObject(response.body()).getJSONArray("features").getJSONObject(0).getJSONObject("properties").getDouble("value");
+        new JSONObject(response.body()).getJSONArray("features").getJSONObject(0).getJSONObject("properties").getDouble("value");
+
+        return
+    }
+
+
+
+    private double getOverallWeather() {
+
+        if
+
+
     }
 
 }
