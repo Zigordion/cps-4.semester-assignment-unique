@@ -14,7 +14,6 @@ const WeatherComponent = ({apiEndpoint, valueName, imagePath, altText} : Weather
         const fetchWeatherData = async()=>{
             try{
                 const response = await axios.get('http://localhost:8020/api/weather/' + apiEndpoint)
-                console.log(response);
                 setWeatherData(response.data);
             } catch (error){
                 console.error("Error while fetching weather data: ", error);

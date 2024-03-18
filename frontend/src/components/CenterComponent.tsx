@@ -5,12 +5,12 @@ import TimeComponent from './WeatherComponent'
 
 const CenterComponent = () => {
 
-  const [timeData, setTimeData] = useState<any>(null);
+  const [timeData, setTimeData] = useState<number>();
   useEffect(()=>{
       const fetchTimeData = async()=>{
           try{
               const response = await axios.get('http://localhost:8020/api/weather/time')
-              console.log(response);
+              console.log(response.data);
               setTimeData(response.data);
           } catch (error){
               console.error("Error while fetching time data: ", error);
