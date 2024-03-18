@@ -10,7 +10,7 @@ import windyImage from "../images/mainIcons/Windy.png";
 
 const CenterComponent = () => {
 
-  const [timeData, setTimeData] = useState<number>();
+  const [timeData, setTimeData] = useState<any>();
   useEffect(()=>{
       const fetchTimeData = async()=>{
           try{
@@ -25,6 +25,7 @@ const CenterComponent = () => {
   },  []);
 
 
+const [overallText, setOverallText] = useState<string>();
 
 const [overallImage, setOverallImage] = useState<string>();
 useEffect(()=>{
@@ -39,12 +40,16 @@ useEffect(()=>{
         }
         if (overallData == 1) {
             setOverallImage(rainyImage);
+            setOverallText("Regn")
         } else if (overallData == 2) {
             setOverallImage(windyImage);
+            setOverallText("Blæsende")
         } else if (overallData == 3) {
             setOverallImage(cloudyImage);
+            setOverallText("Skyet")
         } else {
             setOverallImage(sunnyImage);
+            setOverallText("Klart")
         }
     }
     fetchOverall();
@@ -53,9 +58,10 @@ useEffect(()=>{
 }, [])
   return (
     <div className='container'>
-        <h1>Odense<br/>Vejrudsigt</h1>
-        <h1>{timeData}</h1>
-        <img src={overallImage}/>
+        <h1 className='title'>Odense<br/>Vejrudsigt</h1>
+        <p className='timedata'>{timeData}</p>
+        <img className='oImage' src={overallImage} width={250}/>
+        <p className='overalltext'>{overallText}</p>
     </div>
   )
 }

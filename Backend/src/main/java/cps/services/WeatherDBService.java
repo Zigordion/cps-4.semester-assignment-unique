@@ -31,11 +31,11 @@ public class WeatherDBService {
         weatherDataRepository.save(weatherData);
     }
 
-    public WeatherData getWeatherData(Long id){
+    public WeatherData getWeatherData(Long id) {
         return weatherDataRepository.findById(id).orElse(null);
     }
 
-// API key to dmi: 4ed024e9-49f9-4286-b988-5c97597774db
+    // API key to dmi: 4ed024e9-49f9-4286-b988-5c97597774db
 //4046b36a-f328-471f-91db-0249dbf703d3
 //        URI uri = UriComponentsBuilder.fromUriString("https://dmigw.govcloud.dk/v1/forecastdata")
 //                .queryParam("api-key", "4ed024e9-49f9-4286-b988-5c97597774db")
@@ -47,6 +47,7 @@ public class WeatherDBService {
 //                .build();
     //https://dmigw.govcloud.dk/v2/metObs/collections/observation/items?period=latest-10-minutes&parameterId=temp_dry&bbox=9.938,55.2629,10.8478,55.6235&api-key=03c12439-02f5-45e5-92c1-8e633abfa088
     ArrayList<String> parameterIds = new ArrayList<>(List.of(new String[]{"precip_dur_past10min", "temp_dry", "humidity", "wind_min", "wind_dir", "cloud_cover", "sun_last10min_glob", "radia_glob"}));
+
     public WeatherData getAllValues() {
         URI uri = UriComponentsBuilder.fromUriString("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items")
                 .queryParam("period", "latest-10-minutes")
@@ -69,10 +70,10 @@ public class WeatherDBService {
         JSONArray featureArray = new JSONObject(response.body()).getJSONArray("features");
         for (int i = 0; i < featureArray.length(); i++) {
             String parameterId = featureArray.getJSONObject(i).getJSONObject("properties").getString("parameterId");
-            if(!parameterIds.contains(parameterId)){
+            if (!parameterIds.contains(parameterId)) {
                 continue;
             }
-            valueMap.put(parameterId,featureArray.getJSONObject(i).getJSONObject("properties").getDouble("value"));
+            valueMap.put(parameterId, featureArray.getJSONObject(i).getJSONObject("properties").getDouble("value"));
         }
         String time = featureArray.getJSONObject(0).getJSONObject("properties").getString("observed");
         Timestamp timestamp = getTimestampFromString(time);
@@ -86,9 +87,10 @@ public class WeatherDBService {
                 valueMap.get("precip_dur_past10min"),
                 valueMap.get("radia_glob"),
                 timestamp
-                );
+        );
     }
-    private Timestamp getTimestampFromString(String time){
+
+    private Timestamp getTimestampFromString(String time) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             Date date = sdf.parse(time);
@@ -99,12 +101,19 @@ public class WeatherDBService {
         }
         return null;
     }
-    
+
+    public String getDateTime() {
+        Timestamp ts = getAllValues().getTimestamp();
+        Date date = new Date(ts.getTime());
+        SimpleDateFormat sdf = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
+        return sdf.format(date);
+
+    }
 
     public double getOverallWeather() {
 
         WeatherData wd = getAllValues();
-        
+
         if (wd.getRain() > 1) {
             return 1;
         } else if (wd.getWindSpeed() > 8) {

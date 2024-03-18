@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+
 @RestController
 @RequestMapping("api/weather")
 public class WeatherController {
@@ -16,9 +18,9 @@ public class WeatherController {
     }
 
     @GetMapping("/time")
-    public ResponseEntity<Double> PrintTimeData(){
+    public String PrintTimeData(){
         //tmp method
-        return ResponseEntity.ok(2.0);
+        return weatherDBService.getDateTime();
     }
 
     @GetMapping("/temp")
@@ -41,4 +43,7 @@ public class WeatherController {
     public double getOverallWeather(){
         return weatherDBService.getOverallWeather();
     }
+
+
+
 }
