@@ -2,10 +2,11 @@ package cps.controllers;
 
 import cps.models.WeatherData;
 import cps.services.WeatherDBService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RequestMapping("api/weather")
 public class WeatherController {
     private final WeatherDBService weatherDBService;
@@ -14,11 +15,12 @@ public class WeatherController {
         this.weatherDBService = weatherDBService;
     }
 
-    @GetMapping("/{id}")
-    public WeatherData getWeatherData(@PathVariable Long id){
-        //Tmp Method
-        return weatherDBService.getWeatherData(id);
+    @GetMapping("/time")
+    public ResponseEntity<Double> PrintTimeData(){
+        //tmp method
+        return ResponseEntity.ok(2.0);
     }
+
     @GetMapping("/temp")
     public double GetWeatherData(){
         return weatherDBService.getTemperatureExternalAPI();
@@ -28,9 +30,9 @@ public class WeatherController {
         //Tmp Method
         weatherDBService.addWeatherToDB(weatherData);
     }
-    @GetMapping("/time")
-    public double PrintTimeData(){
-        //tmp method
-        return 1;
+    @GetMapping("/{id}")
+    public WeatherData getWeatherData(@PathVariable Long id){
+        //Tmp Method
+        return weatherDBService.getWeatherData(id);
     }
 }

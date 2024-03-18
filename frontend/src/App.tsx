@@ -10,16 +10,16 @@ function App() {
       <div className='display-overview'>
             <div className='weather-component-container'>
               <WeatherComponent valueName='Temperature' apiEndpoint='temp' imagePath={temperatureImage} altText='Temperature icon shown here'/>
-              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
-              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
-              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='te' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='te' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='te' imagePath={temperatureImage} altText='Temperature icon shown here'/>
             </div>
             <CenterComponent/>
             <div className='weather-component-container'>
-              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
-              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
-              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
-              <WeatherComponent valueName='Temperature' apiEndpoint='1' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='te' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='te' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='te' imagePath={temperatureImage} altText='Temperature icon shown here'/>
+              <WeatherComponent valueName='Temperature' apiEndpoint='te' imagePath={temperatureImage} altText='Temperature icon shown here'/>
             </div>
       </div>
       

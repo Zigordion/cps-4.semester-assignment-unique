@@ -26,8 +26,7 @@ public class WeatherDBService {
         weatherDataRepository.save(weatherData);
     }
     public WeatherData getWeatherData(Long id){
-        WeatherData weatherData = weatherDataRepository.findById(id).orElse(new WeatherData());
-        return weatherDataRepository.findById(id).orElse(null);
+        return weatherDataRepository.findById(id).orElse(new WeatherData());
     }
 
     public WeatherData getCurrentWeatherData(){
