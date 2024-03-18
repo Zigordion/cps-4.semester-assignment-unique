@@ -23,7 +23,7 @@ public class WeatherController {
 
     @GetMapping("/temp")
     public double GetWeatherData(){
-        return weatherDBService.getTemperatureExternalAPI();
+        return weatherDBService.getAllValues().getTemperature();
     }
     @PostMapping("/")
     public void addWeatherData(@RequestBody WeatherData weatherData){
