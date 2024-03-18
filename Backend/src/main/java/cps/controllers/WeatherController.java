@@ -37,4 +37,8 @@ public class WeatherController {
         return weatherDBService.getWeatherData(id);
 
     }
+    @GetMapping("/overall")
+    public double getOverallWeather(){
+        return weatherDBService.getOverallWeather();
+    }
 }

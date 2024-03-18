@@ -99,11 +99,21 @@ public class WeatherDBService {
         }
         return null;
     }
+    
 
+    public double getOverallWeather() {
 
-    private double getOverallWeather() {
-
-        return 0;
+        WeatherData wd = getAllValues();
+        
+        if (wd.getRain() > 1) {
+            return 1;
+        } else if (wd.getWindSpeed() > 8) {
+            return 2;
+        } else if (wd.getCloudCoverage() > 60) {
+            return 3;
+        } else {
+            return 4;
+        }
 
     }
 
