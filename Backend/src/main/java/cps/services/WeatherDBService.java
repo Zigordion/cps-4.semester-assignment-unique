@@ -99,6 +99,9 @@ public class WeatherDBService {
     public WeatherData getLatestValueFromDB(){
         return weatherDataRepository.findLatestEntry();
     }
+    public WeatherData getValueFromTimestamp(Timestamp timestamp){
+        return weatherDataRepository.findByClosestTimestamp(timestamp);
+    }
 
     private Timestamp getTimestampFromString(String time) {
         try {
@@ -116,7 +119,6 @@ public class WeatherDBService {
         Date date = new Date(ts.getTime());
         SimpleDateFormat sdf = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
         return sdf.format(date);
-
     }
 
     public double getOverallWeather() {

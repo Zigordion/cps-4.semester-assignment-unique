@@ -4,6 +4,11 @@ import cps.models.WeatherData;
 import cps.services.WeatherDBService;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 @RestController
 @RequestMapping("api/weather")
@@ -23,16 +28,24 @@ public class WeatherController {
         weatherDBService.storeValuesInDB();
     }
     @GetMapping("/")
-    public WeatherData GetTempData(){
+    public WeatherData GetWeatherData(){
         return weatherDBService.getLatestValueFromDB();
     }
 
-    @GetMapping("/{id}")
-    public WeatherData getWeatherData(@PathVariable Long id){
-        //Tmp Method
-        return weatherDBService.getWeatherData(id);
-
+    @GetMapping("/{timestampInput}")
+    public WeatherData GetWeatherDataSpecific(@PathVariable String timestampInput){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
+        try {
+            Date date = simpleDateFormat.parse(timestampInput);
+            Timestamp timestamp = new Timestamp(date.getTime());
+            return weatherDBService.getValueFromTimestamp(timestamp);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
+
     @GetMapping("/overall")
     public double getOverallWeather(){
         return weatherDBService.getOverallWeather();

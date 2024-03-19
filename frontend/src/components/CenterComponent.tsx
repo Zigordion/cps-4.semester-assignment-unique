@@ -1,7 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import axios from 'axios'
 import './CenterComponent.css'
-import TimeComponent from './WeatherComponent'
 import cloudyImage from "../images/mainIcons/Cloudy.png";
 import rainyImage from "../images/mainIcons/Rainy.png";
 import sunnyImage from "../images/mainIcons/Sunny.png";
@@ -38,13 +37,13 @@ useEffect(()=>{
         } catch (error){
             console.error("Error while fetching overall weather data", error);
         }
-        if (overallData == 1) {
+        if (overallData === 1) {
             setOverallImage(rainyImage);
             setOverallText("Regn")
-        } else if (overallData == 2) {
+        } else if (overallData === 2) {
             setOverallImage(windyImage);
             setOverallText("Blæsende")
-        } else if (overallData == 3) {
+        } else if (overallData === 3) {
             setOverallImage(cloudyImage);
             setOverallText("Skyet")
         } else {
