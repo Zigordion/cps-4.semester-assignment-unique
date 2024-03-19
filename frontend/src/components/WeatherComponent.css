@@ -8,7 +8,7 @@
     max-height: 150px;
     max-width: 450px;
     width: 500px;
-    justify-content: center;
+    justify-content: space-between;
 
 }
 .weather-icon{
