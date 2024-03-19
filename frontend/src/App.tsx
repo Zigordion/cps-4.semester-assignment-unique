@@ -11,6 +11,7 @@ import directionImage from "./images/sideIcons/Vindretning.png";
 import windpowerImage from "./images/sideIcons/Vindstyrke.png";
 import sunshineImage from "./images/sideIcons/Solskin.png";
 import CenterComponent from './components/CenterComponent';
+import TimebarComponent from './components/TimebarComponent';
 interface WeatherData{
   id: number;
   temperature: number;
@@ -55,7 +56,7 @@ function App() {
               <WeatherComponent valueName='Stråling' value={weatherData?.solarRad} imagePath={radiationImage} altText='Radiation icon shown here'/>
             </div>
       </div>
-      
+      <TimebarComponent/>
     </div>
   );
 }

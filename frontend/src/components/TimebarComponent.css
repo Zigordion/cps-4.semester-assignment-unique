@@ -1,0 +1,11 @@
+.barBackground{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #98CEFF;
+    border-radius: 3%/30%;
+    margin-right: 3.4%;
+    margin-left: 3.4%;
+    margin-bottom: 1%;
+    padding: 50px;
+}
