@@ -43,7 +43,7 @@ public class WeatherDBService {
     //https://dmigw.govcloud.dk/v2/metObs/collections/observation/items?period=latest-10-minutes&parameterId=temp_dry&bbox=9.938,55.2629,10.8478,55.6235&api-key=03c12439-02f5-45e5-92c1-8e633abfa088
     ArrayList<String> parameterIds = new ArrayList<>(List.of(new String[]{"precip_past10min", "temp_dry", "humidity", "wind_speed", "wind_dir", "cloud_cover", "sun_last10min_glob", "radia_glob"}));
 
-    @Scheduled(fixedRate = 600_000) //equal to 10 min.
+    @Scheduled(fixedRate = 600_000) //equal  1000 = 1 sec * 60*10 10 min.
     public void storeValuesInDB() {
         URI uri = UriComponentsBuilder.fromUriString("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items")
                 .queryParam("period", "latest-10-minutes")
@@ -67,7 +67,6 @@ public class WeatherDBService {
         for (int i = 0; i < featureArray.length(); i++) {
             String parameterId = featureArray.getJSONObject(i).getJSONObject("properties").getString("parameterId");
             if (!parameterIds.contains(parameterId)) {
-                System.out.println(parameterId);
                 continue;
             }
             double val = featureArray.getJSONObject(i).getJSONObject("properties").getDouble("value");
@@ -77,6 +76,12 @@ public class WeatherDBService {
         }
         String time = featureArray.getJSONObject(0).getJSONObject("properties").getString("observed");
         Timestamp timestamp = getTimestampFromString(time);
+        WeatherData latestWeatherData = getLatestValueFromDB();
+        if(latestWeatherData != null && timestamp == latestWeatherData.getTimestamp()){
+            System.out.println("skipping");
+            return;
+        }
+
         WeatherData weatherData = new WeatherData();
         weatherData.setRain(valueMap.get("precip_past10min"));
         weatherData.setTimestamp(timestamp);
