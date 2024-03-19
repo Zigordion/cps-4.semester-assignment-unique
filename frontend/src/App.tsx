@@ -35,7 +35,7 @@ function App() {
               <WeatherComponent valueName='Vindretning' value={weatherData?.windDirection} imagePath={directionImage} altText='Wind direction icon shown here'/>
               <WeatherComponent valueName='Solskin' value={weatherData?.sunMin} imagePath={sunshineImage} altText='Sunshine icon shown here'/>
             </div>
-            <CenterComponent/>
+            <CenterComponent timeData={weatherData?.timestamp}/>
             <div className='weather-component-container'>
               <WeatherComponent valueName='Skydække' value= {weatherData?.cloudCoverage} imagePath={cloudcoverImage} altText='Cloud cover icon shown here'/>
               <WeatherComponent valueName='Luftfugtighed' value={weatherData?.humidity} imagePath={humidityImage} altText='Humidity icon shown here'/>

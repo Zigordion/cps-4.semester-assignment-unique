@@ -6,7 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -17,6 +16,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -78,11 +78,10 @@ public class WeatherDBService {
         String time = featureArray.getJSONObject(0).getJSONObject("properties").getString("observed");
         Timestamp timestamp = getTimestampFromString(time);
         WeatherData latestWeatherData = getLatestValueFromDB();
-        if(latestWeatherData != null && timestamp == latestWeatherData.getTimestamp()){
+        if(latestWeatherData != null && timestamp.equals(latestWeatherData.getTimestamp())){
             System.out.println("skipping");
             return;
         }
-
         WeatherData weatherData = new WeatherData();
         weatherData.setRain(valueMap.get("precip_past10min"));
         weatherData.setTimestamp(timestamp);
@@ -98,10 +97,11 @@ public class WeatherDBService {
     }
 
     public WeatherData getLatestValueFromDB(){
-        return weatherDataRepository.findLatestEntry();
+        System.out.println(weatherDataRepository.findFirstByTimestampLessThanEqualOrderByTimestampDesc(Timestamp.valueOf(LocalDateTime.now())));
+        return weatherDataRepository.findFirstByTimestampLessThanEqualOrderByTimestampDesc(Timestamp.valueOf(LocalDateTime.now()));
     }
     public WeatherData getValueFromTimestamp(Timestamp timestamp){
-        return weatherDataRepository.findByClosestTimestamp(timestamp);
+        return weatherDataRepository.findFirstByTimestampLessThanEqualOrderByTimestampDesc(timestamp);
     }
 
     private Timestamp getTimestampFromString(String time) {
@@ -123,11 +123,7 @@ public class WeatherDBService {
     }
 
     public Timestamp[] getAllTimestamps(){
-        //get all timestamps from db
-        //
-        Timestamp[] timestamps = weatherDataRepository.findWeatherDataByTimestamp();
-        System.out.println(Arrays.toString(timestamps));
-        return  timestamps;
+        return weatherDataRepository.findTimestamps();
     }
 
 

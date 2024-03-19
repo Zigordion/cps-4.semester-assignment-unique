@@ -42,7 +42,7 @@ public class WeatherController {
 
     @GetMapping("/time/{timestampInput}")
     public WeatherData GetWeatherDataSpecific(@PathVariable String timestampInput){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         try {
             Date date = simpleDateFormat.parse(timestampInput);
             Timestamp timestamp = new Timestamp(date.getTime());

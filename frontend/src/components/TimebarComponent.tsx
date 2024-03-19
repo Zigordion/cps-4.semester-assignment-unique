@@ -40,15 +40,23 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponent) => {
     return `${value}`;
   }
   const [timestamps,setTimestamps] = useState<Mark[]>()
-
   function valChanged(event: Event, value: number){
-      fetchSpecificTimeData(value)
+      const mark = timestamps?.find(mark=> mark.value === value);
+      console.log(timestamps)
+      console.log(mark , value)
+      if(mark){
+        const timestamp = mark.label;
+        fetchSpecificTimeData(timestamp)
+      }
+      else{
+        console.error("error while looking determining timestamp in timebar")
+      }
   }
 
-  const fetchSpecificTimeData = async(timestamp: number)=>{
+  const fetchSpecificTimeData = async(timestamp: string)=>{
     try{
-        const response = await axios.get('http://localhost:8020/api/weather/' + timestamp)
-        console.log(response.data);
+      const response = await axios.get('http://localhost:8020/api/weather/time/' + timestamp)
+        console.log(response.data, timestamp)
         setWeatherData(response.data);
     } catch (error){
         console.error("Error while fetching weather data: ", error);
