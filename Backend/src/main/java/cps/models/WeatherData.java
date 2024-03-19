@@ -17,22 +17,8 @@ public class WeatherData {
     private double windDirection;
     private double sunMin;
     private double cloudCoverage;
-
-    public WeatherData(double temperature, double windSpeed, double windDirection, double sunMin, double cloudCoverage, double humidity, double rain, double solarRad, Timestamp timestamp) {
-        this.temperature = temperature;
-        this.windSpeed = windSpeed;
-        this.windDirection = windDirection;
-        this.sunMin = sunMin;
-        this.cloudCoverage = cloudCoverage;
-        this.humidity = humidity;
-        this.rain = rain;
-        this.solarRad = solarRad;
-        this.timestamp = timestamp;
-    }
-
     private double humidity;
     private double rain;
     private double solarRad;
     private Timestamp timestamp;
-
 }

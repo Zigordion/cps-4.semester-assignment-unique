@@ -2,11 +2,8 @@ package cps.controllers;
 
 import cps.models.WeatherData;
 import cps.services.WeatherDBService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 
 @RestController
 @RequestMapping("api/weather")
@@ -19,18 +16,15 @@ public class WeatherController {
 
     @GetMapping("/time")
     public String PrintTimeData(){
-        //tmp method
         return weatherDBService.getDateTime();
     }
-
-    @GetMapping("/temp")
-    public double GetWeatherData(){
-        return weatherDBService.getAllValues().getTemperature();
+    @PostMapping("/privateDoNotCall")
+    public void StoreValueDB(){
+        weatherDBService.storeValuesInDB();
     }
-    @PostMapping("/")
-    public void addWeatherData(@RequestBody WeatherData weatherData){
-        //Tmp Method
-        weatherDBService.addWeatherToDB(weatherData);
+    @GetMapping("/")
+    public WeatherData GetTempData(){
+        return weatherDBService.getLatestValueFromDB();
     }
 
     @GetMapping("/{id}")
