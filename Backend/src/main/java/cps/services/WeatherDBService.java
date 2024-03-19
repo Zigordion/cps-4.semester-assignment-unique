@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -120,6 +121,15 @@ public class WeatherDBService {
         SimpleDateFormat sdf = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
         return sdf.format(date);
     }
+
+    public Timestamp[] getAllTimestamps(){
+        //get all timestamps from db
+        //
+        Timestamp[] timestamps = weatherDataRepository.findWeatherDataByTimestamp();
+        System.out.println(Arrays.toString(timestamps));
+        return  timestamps;
+    }
+
 
     public double getOverallWeather() {
 

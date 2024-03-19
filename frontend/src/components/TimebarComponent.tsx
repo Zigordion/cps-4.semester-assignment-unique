@@ -14,22 +14,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const marks = [
 
-    {
-        value: 0,
-        label: 'Timestamp 0',
-      },
-      {
-        value: 50,
-        label: 'timestamp 1',
-      },
-      {
-        value: 100,
-        label: 'timestamp X',
-      },
-
-]
 interface WeatherData{
   id: number;
   temperature: number;
@@ -42,6 +27,10 @@ interface WeatherData{
   solarRad: number;
   timestamp: string;
 }
+interface Mark{
+  value: number;
+  label: string;
+}
 interface TimebarComponent{
   setWeatherData: React.Dispatch<React.SetStateAction<WeatherData | undefined>>;
 }
@@ -50,6 +39,7 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponent) => {
   function valuetext(value: number) {
     return `${value}`;
   }
+  const [timestamps,setTimestamps] = useState<Mark[]>()
 
   function valChanged(event: Event, value: number){
       fetchSpecificTimeData(value)
@@ -66,7 +56,7 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponent) => {
   }
 
   useEffect(()=>{
-    const fetchTimeData = async()=>{
+    const fetchInitialWeatherData = async()=>{
         try{
             const response = await axios.get('http://localhost:8020/api/weather/')
             console.log(response.data);
@@ -75,19 +65,30 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponent) => {
             console.error("Error while fetching weather data: ", error);
         }
     }
-    fetchTimeData();
+    const fetchAllTimeData = async()=>{
+      try{
+        const response = await axios.get<string[]>('http://localhost:8020/api/weather/time/all')
+        console.log(response.data);
+        setTimestamps(response.data.map((timestamp, index) =>{
+          return {label:timestamp, value: index/(response.data.length-1)*100}
+        }));
+      } catch (error){
+          console.error("Error while fetching weather data: ", error);
+      }
+    }
+    fetchAllTimeData();
+    fetchInitialWeatherData();
   },  []);
 
   return (
     <div className='barBackground'>
-            
         <Slider className='Slider'
             aria-label="Small steps"
             defaultValue={100}
             getAriaValueText={valuetext}
             step={null}
             size="medium"
-            marks={marks}
+            marks={timestamps}
             valueLabelDisplay="auto"
             classes={{root: classes.sliderRoot}}
             onChange={valChanged}

@@ -2,6 +2,7 @@ package cps.controllers;
 
 import cps.models.WeatherData;
 import cps.services.WeatherDBService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -20,9 +21,16 @@ public class WeatherController {
     }
 
     @GetMapping("/time")
-    public String PrintTimeData(){
+    public String GetTimeData(){
         return weatherDBService.getDateTime();
     }
+    @GetMapping("/time/all")
+    public ResponseEntity<Timestamp[]> GetAllTimeData(){
+        ResponseEntity<Timestamp[]> response = ResponseEntity.ok(weatherDBService.getAllTimestamps());
+        System.out.println(response);
+        return response;
+    }
+
     @PostMapping("/privateDoNotCall")
     public void StoreValueDB(){
         weatherDBService.storeValuesInDB();
@@ -32,7 +40,7 @@ public class WeatherController {
         return weatherDBService.getLatestValueFromDB();
     }
 
-    @GetMapping("/{timestampInput}")
+    @GetMapping("/time/{timestampInput}")
     public WeatherData GetWeatherDataSpecific(@PathVariable String timestampInput){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
         try {
@@ -44,13 +52,8 @@ public class WeatherController {
             return null;
         }
     }
-
-
     @GetMapping("/overall")
     public double getOverallWeather(){
         return weatherDBService.getOverallWeather();
     }
-
-
-
 }
