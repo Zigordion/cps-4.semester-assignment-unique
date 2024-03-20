@@ -1,4 +1,4 @@
-package cps.models;
+package cps;
 import jakarta.persistence.*;
 import lombok.Data;
 

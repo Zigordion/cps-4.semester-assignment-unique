@@ -1,7 +1,7 @@
-package cps.services;
+package cps;
 
-import cps.models.WeatherData;
-import cps.repositories.WeatherDataRepository;
+import cps.WeatherData;
+import cps.WeatherDataRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;

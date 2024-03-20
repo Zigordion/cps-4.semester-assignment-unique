@@ -1,7 +1,5 @@
-package cps.controllers;
+package cps;
 
-import cps.models.WeatherData;
-import cps.services.WeatherDBService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
