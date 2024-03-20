@@ -8,8 +8,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@EntityScan(basePackages = "cps.models")
-@EnableJpaRepositories(basePackages = "cps.repositories")
+@EntityScan(basePackages = "cps")
+@EnableJpaRepositories(basePackages = "cps")
 public class BackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);
