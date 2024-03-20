@@ -12,7 +12,7 @@ interface CenterComponentProps{
 const CenterComponent = ({timeData}: CenterComponentProps) => {
     console.log(timeData)
     const [overallText, setOverallText] = useState<string>();
-
+    
     const [overallImage, setOverallImage] = useState<string>();
     useEffect(()=>{
         let overallData: number;

@@ -1,7 +1,7 @@
 import React from 'react'
 import './WeatherComponent.css'
 interface WeatherComponentProps{
-    value: number | undefined;
+    value: number | string | undefined;
     valueName: string;
     imagePath:string;
     altText: string;
@@ -9,8 +9,10 @@ interface WeatherComponentProps{
 const WeatherComponent = ({value, valueName, imagePath, altText} : WeatherComponentProps ) => {
     return (
         <div className='weather-component'>
-            <img height={50} className='weather-icon' src={imagePath} alt={altText}></img>
-            <h3>{valueName} </h3>
+            <span className='icon-name'>
+                <img height={50} className='weather-icon' src={imagePath} alt={altText}></img>
+                <h3>{valueName} </h3>
+            </span>
             <h3>{value!=null ? value : '0.0'}</h3>
         </div>
     )

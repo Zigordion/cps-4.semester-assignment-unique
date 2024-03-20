@@ -44,7 +44,7 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponent) => {
       const mark = timestamps?.find(mark=> mark.value === value);
       console.log(timestamps)
       console.log(mark , value)
-      if(mark){
+      if(mark){ //error when there's only 1 datapoint
         const timestamp = mark.label;
         fetchSpecificTimeData(timestamp)
       }

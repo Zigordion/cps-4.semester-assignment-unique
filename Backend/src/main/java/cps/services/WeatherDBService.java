@@ -83,16 +83,15 @@ public class WeatherDBService {
             return;
         }
         WeatherData weatherData = new WeatherData();
-        weatherData.setRain(valueMap.get("precip_past10min"));
+        weatherData.setRain(valueMap.get("precip_past10min")!=null ? valueMap.get("precip_past10min") : 0);
         weatherData.setTimestamp(timestamp);
-        weatherData.setTemperature(valueMap.get("temp_dry"));
-        weatherData.setHumidity(valueMap.get("humidity"));
-        weatherData.setSolarRad(valueMap.get("radia_glob"));
-        weatherData.setCloudCoverage(valueMap.get("cloud_cover"));
-        weatherData.setSunMin(valueMap.get("sun_last10min_glob"));
-        weatherData.setSunMin(valueMap.get("sun_last10min_glob"));
-        weatherData.setWindDirection(valueMap.get("wind_dir"));
-        weatherData.setWindSpeed(valueMap.get("wind_speed"));
+        weatherData.setTemperature(valueMap.get("temp_dry")!=null ? valueMap.get("temp_dry") : 0);
+        weatherData.setHumidity(valueMap.get("humidity")!=null ? valueMap.get("humidity") : 0);
+        weatherData.setSolarRad(valueMap.get("radia_glob")!= null ? valueMap.get("radia_glob") : 0);
+        weatherData.setCloudCoverage(valueMap.get("cloud_cover")!=null ? valueMap.get("cloud_cover") : 0);
+        weatherData.setSunMin(valueMap.get("sun_last10min_glob")!=null ? valueMap.get("sun_last10min_glob") : 0);
+        weatherData.setWindDirection(valueMap.get("wind_dir")!=null ? valueMap.get("wind_dir") : 0);
+        weatherData.setWindSpeed(valueMap.get("wind_speed")!=null ? valueMap.get("wind_speed") : 0);
         weatherDataRepository.save(weatherData);
     }
 
@@ -106,8 +105,11 @@ public class WeatherDBService {
 
     private Timestamp getTimestampFromString(String time) {
         try {
+            System.out.println(time);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             Date date = sdf.parse(time);
+            System.out.println(date.toString());
+            System.out.println(new Timestamp(date.getTime()));
             return new Timestamp(date.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
@@ -130,7 +132,7 @@ public class WeatherDBService {
     public double getOverallWeather() {
 
         WeatherData wd = getLatestValueFromDB();
-
+        System.out.println(wd.toString());
         if (wd.getRain() > 1) {
             return 1;
         } else if (wd.getWindSpeed() > 8) {

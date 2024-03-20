@@ -11,6 +11,8 @@ import windpowerImage from "./images/sideIcons/Vindstyrke.png";
 import sunshineImage from "./images/sideIcons/Solskin.png";
 import CenterComponent from './components/CenterComponent';
 import TimebarComponent from './components/TimebarComponent';
+import { convertTimeToDate, convertWindDirection } from './util/Converter';
+
 interface WeatherData{
   id: number;
   temperature: number;
@@ -32,7 +34,7 @@ function App() {
             <div className='weather-component-container'>
               <WeatherComponent valueName='Temperatur' value={weatherData?.temperature} imagePath={temperatureImage} altText='Temperature icon shown here'/>
               <WeatherComponent valueName='Vindstyrke' value={weatherData?.windSpeed} imagePath={windpowerImage} altText='Wind power icon shown here'/>
-              <WeatherComponent valueName='Vindretning' value={weatherData?.windDirection} imagePath={directionImage} altText='Wind direction icon shown here'/>
+              <WeatherComponent valueName='Vindretning' value={convertWindDirection(weatherData?.windDirection)} imagePath={directionImage} altText='Wind direction icon shown here'/>
               <WeatherComponent valueName='Solskin' value={weatherData?.sunMin} imagePath={sunshineImage} altText='Sunshine icon shown here'/>
             </div>
             <CenterComponent timeData={weatherData?.timestamp}/>
