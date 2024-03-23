@@ -1,7 +1,3 @@
-export function convertTimeToDate(timestamp:string):string{
-    //TODO:
-    return '2000'
-}
 
 export function convertWindDirection(direction: number | undefined): string {
     const directions: [number, number, string][] = [

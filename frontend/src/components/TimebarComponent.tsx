@@ -5,6 +5,7 @@ import './TimebarComponent.css'
 import Slider from '@mui/material-next/Slider';
 import {makeStyles} from '@mui/styles';
 import axios from 'axios'
+import {format, parseISO} from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
     sliderRoot:{
@@ -31,10 +32,10 @@ interface Mark{
   value: number;
   label: string;
 }
-interface TimebarComponent{
+interface TimebarComponentProps{
   setWeatherData: React.Dispatch<React.SetStateAction<WeatherData | undefined>>;
 }
-const TimebarComponent = ( {setWeatherData}:TimebarComponent) => {
+const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
   const classes = useStyles();
   function valuetext(value: number) {
     return `${value}`;
@@ -55,9 +56,11 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponent) => {
 
   const fetchSpecificTimeData = async(timestamp: string)=>{
     try{
-      const response = await axios.get('http://localhost:8020/api/weather/time/' + timestamp)
-        console.log(response.data, timestamp)
-        setWeatherData(response.data);
+      const response = await axios.get<WeatherData>('http://localhost:8020/api/weather/time/' + timestamp)
+      console.log(response.data, timestamp)
+      const formattedTime = format(parseISO(response.data.timestamp), "dd MMM yyyy HH:mm:ss");
+      response.data.timestamp = formattedTime;
+      setWeatherData(response.data);
     } catch (error){
         console.error("Error while fetching weather data: ", error);
     }
@@ -68,6 +71,8 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponent) => {
         try{
             const response = await axios.get('http://localhost:8020/api/weather/')
             console.log(response.data);
+            const formattedTime = format(parseISO(response.data.timestamp), "dd MMM yyyy HH:mm:ss");
+            response.data.timestamp = formattedTime;
             setWeatherData(response.data);
         } catch (error){
             console.error("Error while fetching weather data: ", error);
@@ -78,7 +83,8 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponent) => {
         const response = await axios.get<string[]>('http://localhost:8020/api/weather/time/all')
         console.log(response.data);
         setTimestamps(response.data.map((timestamp, index) =>{
-          return {label:timestamp, value: index/(response.data.length-1)*100}
+          const formattedTime = format(parseISO(timestamp), "dd MMM yyyy HH:mm:ss");
+          return {label:formattedTime, value: index/(response.data.length-1)*100}
         }));
       } catch (error){
           console.error("Error while fetching weather data: ", error);

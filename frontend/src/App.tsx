@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React,{useState} from 'react'
 import './App.css';
 import WeatherComponent from './components/WeatherComponent';
 import temperatureImage from "./images/sideIcons/temperature.png";
@@ -11,7 +11,7 @@ import windpowerImage from "./images/sideIcons/Vindstyrke.png";
 import sunshineImage from "./images/sideIcons/Solskin.png";
 import CenterComponent from './components/CenterComponent';
 import TimebarComponent from './components/TimebarComponent';
-import { convertTimeToDate, convertWindDirection } from './util/Converter';
+import { convertWindDirection } from './util/Converter';
 
 interface WeatherData{
   id: number;
