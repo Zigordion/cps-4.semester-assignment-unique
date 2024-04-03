@@ -16,10 +16,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 @RestController
@@ -53,7 +50,7 @@ public class WeatherController {
     }
     @GetMapping("/time/{timestampInput}")
     public WeatherData GetWeatherDataSpecific(@PathVariable String timestampInput){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
         try {
             Date date = simpleDateFormat.parse(timestampInput);
             Timestamp timestamp = new Timestamp(date.getTime());
@@ -169,6 +166,5 @@ public class WeatherController {
         } else {
             return 4;
         }
-
     }
 }

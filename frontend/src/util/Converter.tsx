@@ -1,7 +1,8 @@
 
 export function convertWindDirection(direction: number | undefined): string {
     const directions: [number, number, string][] = [
-        [337.6, 22.5, 'N'],
+        [337.6, 360, 'N'],
+        [0, 22.5, 'N'],
         [22.6, 67.5, 'NV'],
         [67.6, 112.5, 'V'],
         [112.6, 157.5, 'SV'],
