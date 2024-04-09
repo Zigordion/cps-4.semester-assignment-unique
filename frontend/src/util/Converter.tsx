@@ -26,3 +26,10 @@ export function convertWindDirection(direction: number | undefined): string {
     console.error('winddirection is not within any range')
     return 'Unknown';
 }
+
+export function convertSunToPercent(sunVal: number|undefined) : number|undefined{
+    if(sunVal === undefined){
+        return sunVal;
+    }
+    return sunVal/10*100;
+}

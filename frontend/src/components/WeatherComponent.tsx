@@ -5,15 +5,16 @@ interface WeatherComponentProps{
     valueName: string;
     imagePath:string;
     altText: string;
+    unit:string;
 }
-const WeatherComponent = ({value, valueName, imagePath, altText} : WeatherComponentProps ) => {
+const WeatherComponent = ({value, valueName, imagePath, altText,unit} : WeatherComponentProps ) => {
     return (
         <div className='weather-component'>
             <span className='icon-name'>
                 <img height={50} className='weather-icon' src={imagePath} alt={altText}></img>
                 <h3>{valueName} </h3>
             </span>
-            <h3>{value!=null ? value : '0.0'}</h3>
+            <h3>{value!=null ? value : '0.0'} {unit}</h3>
         </div>
     )
 }

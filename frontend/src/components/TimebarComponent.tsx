@@ -53,7 +53,6 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
         console.error("error while looking determining timestamp in timebar")
       }
   }
-
   const fetchSpecificTimeData = async(timestamp: string)=>{
     try{
       const response = await axios.get<WeatherData>('http://localhost:8020/api/weather/time/' + timestamp)
@@ -93,17 +92,13 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
     fetchAllTimeData();
     fetchInitialWeatherData();
   },  []);
-
   return (
     <div className='barBackground'>
         <Slider className='Slider'
-            aria-label="Small steps"
             defaultValue={100}
-            getAriaValueText={valuetext}
             step={null}
             size="medium"
             marks={timestamps}
-            valueLabelDisplay="auto"
             classes={{root: classes.sliderRoot}}
             onChange={valChanged}
         />
