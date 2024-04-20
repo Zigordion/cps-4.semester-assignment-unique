@@ -1,4 +1,4 @@
-package cps;
+package cps.Repositories.Models;
 import jakarta.persistence.*;
 import lombok.Data;
 
