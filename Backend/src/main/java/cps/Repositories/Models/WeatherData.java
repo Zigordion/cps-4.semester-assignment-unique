@@ -12,6 +12,7 @@ public class WeatherData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String weatherStation;
     private Double temperature;
     private Double windSpeed;
     private Double windDirection;
