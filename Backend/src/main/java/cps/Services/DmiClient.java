@@ -7,10 +7,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.http.HttpResponse;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,7 +37,7 @@ public class DmiClient extends ApiClient {
             valueMap.put(parameterId, val);
         }
         String time = featureArray.getJSONObject(0).getJSONObject("properties").getString("observed");
-        Timestamp timestamp = getTimestampFromString(time);
+        Timestamp timestamp = Util.getTimestampFromString(time);
 
         WeatherData weatherData = new WeatherData();
         weatherData.setRain(valueMap.get("precip_past10min")!=null ? valueMap.get("precip_past10min") : 0);
@@ -55,17 +52,4 @@ public class DmiClient extends ApiClient {
         return weatherData;
     }
 
-    private Timestamp getTimestampFromString(String time) {
-        try {
-            System.out.println(time);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            Date date = sdf.parse(time);
-            System.out.println(date.toString());
-            System.out.println(new Timestamp(date.getTime()));
-            return new Timestamp(date.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
