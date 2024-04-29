@@ -58,10 +58,6 @@ public class WeatherController {
         return weatherService.calculateOverallWeather();
     }
 
-    @PostMapping("/station")
-    public void setWeatherType(){
-        weatherService.setWeatherStation(WeatherStationType.DMI);
-    }
 
 
 }
