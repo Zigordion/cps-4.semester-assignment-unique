@@ -61,6 +61,11 @@ public class WeatherController {
             return null;
         }
     }
+    @GetMapping("/test")
+    public HttpResponse<String> GettestData(){
+        return weatherService.test();
+    }
+
 
     @GetMapping("/overall")
     public double getOverallWeather(){
