@@ -3,6 +3,7 @@ package cps.Controllers;
 import cps.Repositories.Models.WeatherData;
 import cps.Repositories.WeatherDataRepository;
 import cps.Services.WeatherService;
+import cps.Services.WeatherStationType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
@@ -40,10 +41,6 @@ public class WeatherController {
         System.out.println(response);
         return response;
     }
-    @PostMapping("/update")
-    public void StoreValueDB(){
-        weatherService.storeValuesInDB();
-    }
 
     @GetMapping("/")
     public WeatherData GetWeatherData(){
@@ -70,6 +67,11 @@ public class WeatherController {
     @GetMapping("/overall")
     public double getOverallWeather(){
         return weatherService.calculateOverallWeather();
+    }
+
+    @PostMapping("/station")
+    public void setWeatherType(){
+        weatherService.setWeatherStation(WeatherStationType.DMI);
     }
 
 
