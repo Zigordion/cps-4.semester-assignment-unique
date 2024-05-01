@@ -16,13 +16,13 @@ import java.util.*;
 public class WeatherService {
     private final WeatherDataRepository weatherDataRepository;
     private final WeatherStationRepository weatherStationRepository;
-    private final WeatherDataBuilder weatherDataBuilder;
+    private final DataBuilder dataBuilder;
     private ApiClient apiClient;
 
-    public WeatherService(WeatherDataRepository weatherDataRepository, WeatherStationRepository weatherStationRepository, WeatherDataBuilder weatherDataBuilder) {
+    public WeatherService(WeatherDataRepository weatherDataRepository, WeatherStationRepository weatherStationRepository, DataBuilder dataBuilder) {
         this.weatherDataRepository = weatherDataRepository;
         this.weatherStationRepository = weatherStationRepository;
-        this.weatherDataBuilder = weatherDataBuilder;
+        this.dataBuilder = dataBuilder;
         apiClient = new DmiClient();
         //alternatively use a data seeder/SQL
         if (weatherStationRepository.count() == 0) {
@@ -35,14 +35,15 @@ public class WeatherService {
     @Scheduled(fixedRate = 600_000) //equal  1000 = 1 sec * 60*10 10 min.
     public void storeValuesInDB() {
         WeatherData latestWeatherData = getLatestValueFromDB();
-        WeatherStation weatherStation = weatherStationRepository.findFirstByStation("DMI");
-        System.out.println(weatherStation);
-        WeatherData weatherData = apiClient.constructWeatherData(weatherDataBuilder, weatherStation);
-        Timestamp timestamp = weatherData.getTimestamp();
+
+        Timestamp timestamp = apiClient.getTimestamp();
         if (latestWeatherData != null && timestamp.equals(latestWeatherData.getTimestamp())) {
             System.out.println("Already exists in db; skipping");
             return;
         }
+        WeatherStation weatherStation = weatherStationRepository.findFirstByStation("DMI");
+        System.out.println(weatherStation);
+        WeatherData weatherData = apiClient.constructWeatherData(dataBuilder, weatherStation, timestamp);
         weatherDataRepository.save(weatherData);
     }
 

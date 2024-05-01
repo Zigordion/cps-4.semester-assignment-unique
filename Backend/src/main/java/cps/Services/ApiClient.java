@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.sql.Timestamp;
 
 public abstract class ApiClient {
     protected URI uri;
@@ -26,5 +27,6 @@ public abstract class ApiClient {
         }
         return response;
     }
-    public abstract WeatherData constructWeatherData(WeatherDataBuilder weatherDataBuilder, WeatherStation weatherStation);
+    public abstract WeatherData constructWeatherData(WeatherStation weatherStation, Timestamp timestamp);
+    public abstract Timestamp getTimestamp();
 }

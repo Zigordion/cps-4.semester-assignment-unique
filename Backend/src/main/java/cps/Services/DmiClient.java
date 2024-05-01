@@ -23,6 +23,7 @@ public class DmiClient extends ApiClient {
             "cloud_cover",
             "sun_last10min_glob",
             "radia_glob"}));
+    private JSONArray featureArray;
     public DmiClient() {
 
         uri = UriComponentsBuilder.fromUriString("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items")
@@ -33,10 +34,22 @@ public class DmiClient extends ApiClient {
                 .toUri();
     }
     @Override
-    public WeatherData constructWeatherData(WeatherDataBuilder weatherDataBuilder, WeatherStation weatherStation) {
-        HashMap<String, Double> valueMap = new HashMap<>();
+    public Timestamp getTimestamp(){
         HttpResponse<String> response = query();
-        JSONArray featureArray = new JSONObject(response.body()).getJSONArray("features");
+        featureArray = new JSONObject(response.body()).getJSONArray("features");
+        String time = featureArray.getJSONObject(0).getJSONObject("properties").getString("observed");
+        return Util.getTimestampFromString(time);
+    }
+    @Override
+    public WeatherData constructWeatherData(WeatherStation weatherStation, Timestamp timestamp) {
+        WeatherData weatherData = new WeatherData();
+        weatherData.setWeatherStation(weatherStation);
+        weatherData.setTimestamp(timestamp);
+        return weatherData;
+
+    }
+    public void fillData(WeatherData weatherData, DataBuilder dataBuilder){
+        HashMap<String, Double> valueMap = new HashMap<>();
         for (int i = 0; i < featureArray.length(); i++) {
             String parameterId = featureArray.getJSONObject(i).getJSONObject("properties").getString("parameterId");
             if (!parameterIds.contains(parameterId)) {
@@ -46,22 +59,8 @@ public class DmiClient extends ApiClient {
 
             valueMap.put(parameterId, val);
         }
-        String time = featureArray.getJSONObject(0).getJSONObject("properties").getString("observed");
-        Timestamp timestamp = Util.getTimestampFromString(time);
         System.out.println(valueMap);
-        return weatherDataBuilder
-                .reset()
-                .setRain(valueMap.get("precip_past10min"))
-                .setTemperature(valueMap.get("temp_dry"))
-                .setHumidity(valueMap.get("humidity"))
-                .setSolarRad(valueMap.get("radia_glob"))
-                .setCloudCoverage(valueMap.get("cloud_cover"))
-                .setSunMin(valueMap.get("sun_last10min_glob"))
-                .setWindDirection(valueMap.get("wind_dir"))
-                .setWindSpeed(valueMap.get("wind_speed"))
-                .setWeatherStation(weatherStation)
-                .setTimestamp(timestamp)
-                .build();
+
     }
 
 }

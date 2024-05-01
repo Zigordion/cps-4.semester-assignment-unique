@@ -46,7 +46,7 @@ public class WeatherGraphService {
         List<WeatherData> weatherData = weatherDataRepository.findAll();
         Map<Long, String> timestampMap = new HashMap<>();
         for (WeatherData data : weatherData) {
-            timestampMap.put(data.getTemperature().getId(), Util.getDateTime(data.getTimestamp()));
+            timestampMap.put(data.getId(), Util.getDateTime(data.getTimestamp()));
         }
 
         List<GraphDataDTO> graphDataDTOList = new ArrayList<>();
@@ -54,7 +54,7 @@ public class WeatherGraphService {
             GraphDataDTO graphDataDTO = new GraphDataDTO();
             // Assuming all entities have a 'getValue' method
             graphDataDTO.setValue(entity.getValue());
-            graphDataDTO.setTimeStamp(timestampMap.get(entity.getId()));
+            graphDataDTO.setTimeStamp(timestampMap.get(entity.getWeatherData().getId()));
             graphDataDTOList.add(graphDataDTO);
         }
         return graphDataDTOList;
