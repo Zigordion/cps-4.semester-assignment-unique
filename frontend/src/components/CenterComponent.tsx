@@ -9,18 +9,19 @@ import windyImage from "../images/mainIcons/Windy.png";
 interface CenterComponentProps{
     timeData : string|undefined;
 }
+interface OverallWeather{
+  weatherValue: number
+}
 const CenterComponent = ({timeData}: CenterComponentProps) => {
-    console.log(timeData)
     const [overallText, setOverallText] = useState<string>();
-    
     const [overallImage, setOverallImage] = useState<string>();
+
     useEffect(()=>{
         let overallData: number;
         const fetchOverall = async()=>{
             try{
-                const response = await axios.get('http://localhost:8020/api/weather/overall')
-                console.log(response.data);
-                overallData = response.data;
+                const response = await axios.get<OverallWeather>('http://localhost:8020/api/weather/overall')
+                overallData = response.data.weatherValue;
             } catch (error){
                 console.error("Error while fetching overall weather data", error);
             }
@@ -44,8 +45,9 @@ const CenterComponent = ({timeData}: CenterComponentProps) => {
         <div className='container'>
             <h1 className='title'>Odense<br/>Vejrudsigt</h1>
             <p className='timedata'>{timeData != null ? timeData : "0000"}</p>
-            <img className='oImage' src={overallImage} width={250}/>
+            <img className='oImage' src={overallImage} alt='Weather Icon' width={200}/>
             <p className='overalltext'>{overallText}</p>
+            
         </div>
     )
 }

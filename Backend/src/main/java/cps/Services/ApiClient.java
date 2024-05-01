@@ -1,7 +1,7 @@
 package cps.Services;
 
 import cps.Repositories.Models.WeatherData;
-import org.springframework.web.util.UriComponentsBuilder;
+import cps.Repositories.Models.WeatherStation;
 
 import java.io.IOException;
 import java.net.URI;
@@ -26,5 +26,5 @@ public abstract class ApiClient {
         }
         return response;
     }
-    public abstract WeatherData constructWeatherData();
+    public abstract WeatherData constructWeatherData(WeatherDataBuilder weatherDataBuilder, WeatherStation weatherStation);
 }

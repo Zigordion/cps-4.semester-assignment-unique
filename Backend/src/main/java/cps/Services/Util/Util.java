@@ -1,4 +1,4 @@
-package cps.Services;
+package cps.Services.Util;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -18,6 +18,11 @@ public class Util {
             e.printStackTrace();
         }
         return null;
+    }
+    public static String getDateTime(Timestamp ts) {
+        Date date = new Date(ts.getTime());
+        SimpleDateFormat sdf = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
+        return sdf.format(date);
     }
 
 }

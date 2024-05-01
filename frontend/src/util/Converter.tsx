@@ -13,8 +13,8 @@ export function convertWindDirection(direction: number | undefined): string {
     ];
 
     if (direction === undefined) {
-        console.error('direction is undefined, cannot convert to Symbol');
-        return '??';
+        console.log('direction is undefined, cannot convert to Symbol');
+        return 'N/A';
     }
 
     for (const [min, max, cardinal] of directions) {

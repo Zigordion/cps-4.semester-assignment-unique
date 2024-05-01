@@ -3,13 +3,13 @@
     display: flex;
     border-radius: 10%/25%;
     align-items: center;
-    padding: 15px 25px;
+    padding: 15px 25px 15px 0px;
     margin: 20px;
     max-height: 150px;
     max-width: 450px;
     width: 500px;
     justify-content: space-between;
-
+    border-style: solid;
 }
 .weather-icon{
     color: white;
@@ -20,4 +20,5 @@
 .icon-name{
     display: flex;
     align-items: center;
+    margin-right: 20px;
 }

@@ -17,34 +17,32 @@ const useStyles = makeStyles((theme) => ({
 
 
 interface WeatherData{
-  id: number;
-  temperature: number;
-  windSpeed:number;
-  windDirection: number;
-  sunMin: number;
-  cloudCoverage: number;
-  humidity: number;
-  rain: number;
-  solarRad: number;
+  id: number ;
+  temperature: number | undefined;
+  windSpeed:number | undefined;
+  windDirection: number | undefined;
+  sunMin: number | undefined;
+  cloudCoverage: number | undefined;
+  humidity: number | undefined;
+  rain: number | undefined;
+  solarRad: number | undefined;
   timestamp: string;
 }
 interface Mark{
   value: number;
   label: string;
 }
+interface TimeStamps{
+  timestamps: string[]
+}
 interface TimebarComponentProps{
   setWeatherData: React.Dispatch<React.SetStateAction<WeatherData | undefined>>;
 }
 const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
   const classes = useStyles();
-  function valuetext(value: number) {
-    return `${value}`;
-  }
   const [timestamps,setTimestamps] = useState<Mark[]>()
   function valChanged(event: Event, value: number){
       const mark = timestamps?.find(mark=> mark.value === value);
-      console.log(timestamps)
-      console.log(mark , value)
       if(mark){ //error when there's only 1 datapoint
         const timestamp = mark.label;
         fetchSpecificTimeData(timestamp)
@@ -56,7 +54,6 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
   const fetchSpecificTimeData = async(timestamp: string)=>{
     try{
       const response = await axios.get<WeatherData>('http://localhost:8020/api/weather/time/' + timestamp)
-      console.log(response.data, timestamp)
       const formattedTime = format(parseISO(response.data.timestamp), "dd MMM yyyy HH:mm:ss");
       response.data.timestamp = formattedTime;
       setWeatherData(response.data);
@@ -69,7 +66,6 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
     const fetchInitialWeatherData = async()=>{
         try{
             const response = await axios.get('http://localhost:8020/api/weather/')
-            console.log(response.data);
             const formattedTime = format(parseISO(response.data.timestamp), "dd MMM yyyy HH:mm:ss");
             response.data.timestamp = formattedTime;
             setWeatherData(response.data);
@@ -79,11 +75,10 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
     }
     const fetchAllTimeData = async()=>{
       try{
-        const response = await axios.get<string[]>('http://localhost:8020/api/weather/time/all')
-        console.log(response.data);
-        setTimestamps(response.data.map((timestamp, index) =>{
+        const response = await axios.get<TimeStamps>('http://localhost:8020/api/weather/time/all')
+        setTimestamps(response.data.timestamps.map((timestamp, index) =>{
           const formattedTime = format(parseISO(timestamp), "dd MMM yyyy HH:mm:ss");
-          return {label:formattedTime, value: index/(response.data.length-1)*100}
+          return {label:formattedTime, value: index/(response.data.timestamps.length-1)*100}
         }));
       } catch (error){
           console.error("Error while fetching weather data: ", error);
@@ -91,7 +86,7 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
     }
     fetchAllTimeData();
     fetchInitialWeatherData();
-  },  []);
+  },  [setWeatherData]);
   return (
     <div className='barBackground'>
         <Slider className='Slider'
