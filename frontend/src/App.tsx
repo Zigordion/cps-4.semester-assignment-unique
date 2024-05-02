@@ -31,6 +31,7 @@ interface WeatherData{
   timestamp: string;
 }
 function App() {
+  const [timestampMarks, setTimestampMarks] = useState<{ value: number; label: string }[]>([]);
 
   useEffect(()=>{
     const weatherDataEventSource = weatherDataSSE.subscribeWeatherData(
@@ -50,9 +51,16 @@ function App() {
           solarRad,
           timestamp
         } as WeatherData);
+        setTimestampMarks(prevMarks => {
+          const newMarks = [...prevMarks];
+          newMarks.push({ value: newMarks.length, label: timestamp });
+          return newMarks;
+        });
       }
     );
-    weatherDataEventSource.close();
+    return()=>{
+      weatherDataEventSource.close();
+    }
   })
   const [weatherData, setWeatherData] = useState<WeatherData>();
   return (
@@ -77,7 +85,7 @@ function App() {
                   <WeatherComponent page='solar-radiation' valueName='Stråling' unit='W/m2' value={weatherData?.solarRad} imagePath={radiationImage} altText='Radiation icon shown here'/>
                 </div>
               </div>
-              <TimebarComponent setWeatherData={setWeatherData}/>
+              <TimebarComponent setWeatherData={setWeatherData} timestampMarks={timestampMarks} setTimestampMarks={setTimestampMarks}/>
             </div>
           }/>
           <Route path='/:relevantData' element={

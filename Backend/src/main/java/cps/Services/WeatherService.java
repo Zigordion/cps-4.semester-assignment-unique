@@ -20,14 +20,14 @@ public class WeatherService {
     private final WeatherDataBuilder weatherDataBuilder;
     private final SseService sseService;
 
-    private ApiClient apiClient;
+    private IApiClient IApiClient;
 
     public WeatherService(WeatherDataRepository weatherDataRepository, WeatherStationRepository weatherStationRepository, WeatherDataBuilder weatherDataBuilder, SseService sseService) {
         this.weatherDataRepository = weatherDataRepository;
         this.weatherStationRepository = weatherStationRepository;
         this.weatherDataBuilder = weatherDataBuilder;
         this.sseService = sseService;
-        apiClient = new DmiClient();
+        IApiClient = new DmiClient();
         //alternatively use a data seeder/SQL
         if (weatherStationRepository.count() == 0) {
             WeatherStation weatherStation = new WeatherStation();
@@ -41,7 +41,7 @@ public class WeatherService {
         WeatherData latestWeatherData = getLatestValueFromDB();
         WeatherStation weatherStation = weatherStationRepository.findFirstByStation("DMI");
         System.out.println(weatherStation);
-        WeatherData weatherData = apiClient.constructWeatherData(weatherDataBuilder, weatherStation);
+        WeatherData weatherData = IApiClient.constructWeatherData(weatherDataBuilder, weatherStation);
         Timestamp timestamp = weatherData.getTimestamp();
         if (latestWeatherData != null && timestamp.equals(latestWeatherData.getTimestamp())) {
             System.out.println("Already exists in db; skipping");

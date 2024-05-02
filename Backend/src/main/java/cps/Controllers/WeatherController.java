@@ -57,6 +57,7 @@ public class WeatherController {
     public WeatherDataDTO GetWeatherDataSpecific(@PathVariable String timestampInput){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
         try {
+            System.out.println(timestampInput);
             Date date = simpleDateFormat.parse(timestampInput);
             Timestamp timestamp = new Timestamp(date.getTime());
             return new WeatherDataDTO(weatherService.getValueFromTimestamp(timestamp));

@@ -28,19 +28,17 @@ interface WeatherData{
   solarRad: number | undefined;
   timestamp: string;
 }
-interface Mark{
-  value: number;
-  label: string;
-}
+
 interface TimeStamps{
   timestamps: string[]
 }
 interface TimebarComponentProps{
   setWeatherData: React.Dispatch<React.SetStateAction<WeatherData | undefined>>;
+  timestampMarks: { value: number; label: string }[];
+  setTimestampMarks: React.Dispatch<React.SetStateAction<{ value: number; label: string }[]>>;
 }
-const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
+const TimebarComponent = ( {setWeatherData,timestampMarks, setTimestampMarks}:TimebarComponentProps) => {
   const classes = useStyles();
-  const [timestampMarks,setTimestampMarks] = useState<Mark[]>()
   const [timestamps,setTimestamps] = useState<TimeStamps>()
 
   function valChanged(event: Event, value: number){
@@ -102,7 +100,7 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
     }
     fetchAllTimeData();
     fetchInitialWeatherData();
-  },  [setWeatherData]);
+  },  [timestampMarks,setWeatherData, setTimestampMarks]);
   return (
     <div className='barBackground'>
         <Slider className='Slider'

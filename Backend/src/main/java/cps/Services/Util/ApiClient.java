@@ -1,7 +1,4 @@
-package cps.Services;
-
-import cps.Repositories.Models.WeatherData;
-import cps.Repositories.Models.WeatherStation;
+package cps.Services.Util;
 
 import java.io.IOException;
 import java.net.URI;
@@ -9,10 +6,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public abstract class ApiClient {
-    protected URI uri;
-
-    public HttpResponse<String> query(){
+public class ApiClient {
+    public static HttpResponse<String> query(URI uri){
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(uri)
                 .GET()
@@ -26,5 +21,4 @@ public abstract class ApiClient {
         }
         return response;
     }
-    public abstract WeatherData constructWeatherData(WeatherDataBuilder weatherDataBuilder, WeatherStation weatherStation);
 }

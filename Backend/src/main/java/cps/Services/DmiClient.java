@@ -2,18 +2,21 @@ package cps.Services;
 
 import cps.Repositories.Models.WeatherData;
 import cps.Repositories.Models.WeatherStation;
+import cps.Services.Util.ApiClient;
 import cps.Services.Util.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.net.http.HttpResponse;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DmiClient extends ApiClient {
+public class DmiClient implements IApiClient {
+    protected URI uri;
     private final ArrayList<String> parameterIds = new ArrayList<>(List.of(new String[]{
             "precip_past10min",
             "temp_dry",
@@ -35,7 +38,7 @@ public class DmiClient extends ApiClient {
     @Override
     public WeatherData constructWeatherData(WeatherDataBuilder weatherDataBuilder, WeatherStation weatherStation) {
         HashMap<String, Double> valueMap = new HashMap<>();
-        HttpResponse<String> response = query();
+        HttpResponse<String> response = ApiClient.query(uri);
         JSONArray featureArray = new JSONObject(response.body()).getJSONArray("features");
         for (int i = 0; i < featureArray.length(); i++) {
             String parameterId = featureArray.getJSONObject(i).getJSONObject("properties").getString("parameterId");
