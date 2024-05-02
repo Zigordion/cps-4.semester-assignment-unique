@@ -1,3 +1,4 @@
+import {format, parseISO} from "date-fns";
 
 export function convertWindDirection(direction: number | undefined): string {
     const directions: [number, number, string][] = [
@@ -32,4 +33,8 @@ export function convertSunToPercent(sunVal: number|undefined) : number|undefined
         return sunVal;
     }
     return sunVal/10*100;
+}
+
+export function convertTimeDataToReadable(timestamp:string){
+    return format(parseISO(timestamp), "dd MMM yyyy HH:mm:ss");
 }

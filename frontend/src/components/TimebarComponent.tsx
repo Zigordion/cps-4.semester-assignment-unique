@@ -5,7 +5,7 @@ import './TimebarComponent.css'
 import Slider from '@mui/material-next/Slider';
 import {makeStyles} from '@mui/styles';
 import axios from 'axios'
-import {format, parseISO} from "date-fns";
+import { convertTimeDataToReadable } from '../util/Converter';
 
 const useStyles = makeStyles((theme) => ({
     sliderRoot:{
@@ -40,11 +40,22 @@ interface TimebarComponentProps{
 }
 const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
   const classes = useStyles();
-  const [timestamps,setTimestamps] = useState<Mark[]>()
+  const [timestampMarks,setTimestampMarks] = useState<Mark[]>()
+  const [timestamps,setTimestamps] = useState<TimeStamps>()
+
   function valChanged(event: Event, value: number){
-      const mark = timestamps?.find(mark=> mark.value === value);
-      if(mark){ //error when there's only 1 datapoint
-        const timestamp = mark.label;
+    if(!timestampMarks || !timestamps){
+      return;
+    }
+      const mark = timestampMarks?.find(mark=> mark.value === value);
+      
+      if(mark){ 
+        let timestamp =  mark.label;
+        if (timestamp ==="") {
+          const index = Math.round((value / 100) * (timestampMarks.length - 1));
+          timestamp = timestamps.timestamps[index];
+          timestamp = convertTimeDataToReadable(timestamp);
+        }
         fetchSpecificTimeData(timestamp)
       }
       else{
@@ -54,7 +65,7 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
   const fetchSpecificTimeData = async(timestamp: string)=>{
     try{
       const response = await axios.get<WeatherData>('http://localhost:8020/api/weather/time/' + timestamp)
-      const formattedTime = format(parseISO(response.data.timestamp), "dd MMM yyyy HH:mm:ss");
+      const formattedTime = convertTimeDataToReadable(response.data.timestamp);
       response.data.timestamp = formattedTime;
       setWeatherData(response.data);
     } catch (error){
@@ -66,7 +77,7 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
     const fetchInitialWeatherData = async()=>{
         try{
             const response = await axios.get('http://localhost:8020/api/weather/')
-            const formattedTime = format(parseISO(response.data.timestamp), "dd MMM yyyy HH:mm:ss");
+            const formattedTime = convertTimeDataToReadable(response.data.timestamp);
             response.data.timestamp = formattedTime;
             setWeatherData(response.data);
         } catch (error){
@@ -76,9 +87,14 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
     const fetchAllTimeData = async()=>{
       try{
         const response = await axios.get<TimeStamps>('http://localhost:8020/api/weather/time/all')
-        setTimestamps(response.data.timestamps.map((timestamp, index) =>{
-          const formattedTime = format(parseISO(timestamp), "dd MMM yyyy HH:mm:ss");
-          return {label:formattedTime, value: index/(response.data.timestamps.length-1)*100}
+        setTimestamps(response.data);
+        setTimestampMarks(response.data.timestamps.map((timestamp, index) => {
+          let label = ""; 
+          if (index === 0 || index === response.data.timestamps.length - 1) {
+            const formattedTime = convertTimeDataToReadable(timestamp);
+            label = formattedTime; 
+          }
+          return { label, value: index / (response.data.timestamps.length - 1) * 100 };
         }));
       } catch (error){
           console.error("Error while fetching weather data: ", error);
@@ -93,7 +109,7 @@ const TimebarComponent = ( {setWeatherData}:TimebarComponentProps) => {
             defaultValue={100}
             step={null}
             size="medium"
-            marks={timestamps}
+            marks={timestampMarks}
             classes={{root: classes.sliderRoot}}
             onChange={valChanged}
         />

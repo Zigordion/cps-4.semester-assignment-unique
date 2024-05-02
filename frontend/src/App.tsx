@@ -16,6 +16,7 @@ import { convertWindDirection, convertSunToPercent } from './util/Converter';
 import NavBarComponent from './components/NavBarComponent';
 import GraphComponent from './components/GraphComponent';
 import { weatherData as weatherDataSSE } from './util/SseConsumer';
+import { convertTimeDataToReadable } from './util/Converter';
 
 interface WeatherData{
   id: number;
@@ -34,18 +35,24 @@ function App() {
   useEffect(()=>{
     const weatherDataEventSource = weatherDataSSE.subscribeWeatherData(
       (eventData: WeatherData) => {
-        const {temperature, windDirection, sunMin, cloudCoverage, rain, solarRad, timestamp } = eventData;
+        let {id,temperature, windDirection, sunMin, cloudCoverage, rain, solarRad, timestamp, humidity,windSpeed } = eventData;
+        timestamp = convertTimeDataToReadable(timestamp);
+        
         setWeatherData({
+          id,
           temperature,
+          windSpeed,
           windDirection,
           sunMin,
           cloudCoverage,
+          humidity,
           rain,
           solarRad,
           timestamp
         } as WeatherData);
       }
     );
+    weatherDataEventSource.close();
   })
   const [weatherData, setWeatherData] = useState<WeatherData>();
   return (

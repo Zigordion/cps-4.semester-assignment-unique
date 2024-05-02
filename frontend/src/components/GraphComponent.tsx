@@ -12,7 +12,15 @@ const GraphComponent = () => {
     const [data,setData] = useState<Data[]>()
     const validDataValues = ['temperature', 'wind-speed','sunshine','cloud-coverage','humidity','rain','solar-radiation']
     const {relevantData} = useParams<{relevantData:string}>();
-    
+    const dataValueMapping: { [key: string]: string } = {
+        'temperature': 'Temperatur',
+        'wind-speed': 'Vindstyrke',
+        'sunshine': 'Solskin',
+        'cloud-coverage': 'Skydække',
+        'humidity': 'Luftfugtighed',
+        'rain': 'Nedbør',
+        'solar-radiation': 'Stråling'
+    };
     useEffect(()=>{
         const fetchData = async()=>{
             try{
@@ -42,6 +50,7 @@ const GraphComponent = () => {
     console.log("numericalTime: ", numericalTimeData)
     return (
         <div className='graph-container'>
+            <h1>{dataValueMapping[relevantData]}</h1>
             <LineChart
                 sx={{
                     "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel":{
