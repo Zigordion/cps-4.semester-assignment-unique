@@ -11,8 +11,7 @@ public class Rain implements IGraphDataType {
     private Long id;
 
     private Double value;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "rain", orphanRemoval = true)
     private WeatherData weatherData;
 
 }

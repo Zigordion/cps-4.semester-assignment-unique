@@ -1,5 +1,6 @@
 package cps.Services;
 
+import cps.Controllers.DTO.WeatherDataDTO;
 import cps.Repositories.Models.WeatherData;
 import cps.Repositories.Models.WeatherStation;
 import cps.Repositories.WeatherDataRepository;
@@ -17,12 +18,15 @@ public class WeatherService {
     private final WeatherDataRepository weatherDataRepository;
     private final WeatherStationRepository weatherStationRepository;
     private final WeatherDataBuilder weatherDataBuilder;
+    private final SseService sseService;
+
     private ApiClient apiClient;
 
-    public WeatherService(WeatherDataRepository weatherDataRepository, WeatherStationRepository weatherStationRepository, WeatherDataBuilder weatherDataBuilder) {
+    public WeatherService(WeatherDataRepository weatherDataRepository, WeatherStationRepository weatherStationRepository, WeatherDataBuilder weatherDataBuilder, SseService sseService) {
         this.weatherDataRepository = weatherDataRepository;
         this.weatherStationRepository = weatherStationRepository;
         this.weatherDataBuilder = weatherDataBuilder;
+        this.sseService = sseService;
         apiClient = new DmiClient();
         //alternatively use a data seeder/SQL
         if (weatherStationRepository.count() == 0) {
@@ -44,6 +48,7 @@ public class WeatherService {
             return;
         }
         weatherDataRepository.save(weatherData);
+        sseService.sendToClients(SSETopic.WEATHER_DATA,new WeatherDataDTO(weatherData));
     }
 
     public WeatherData getLatestValueFromDB() {
@@ -68,11 +73,12 @@ public class WeatherService {
     public double calculateOverallWeather() {
         WeatherData wd = getLatestValueFromDB();
         System.out.println(wd.toString());
-        if (wd.getRain().getValue() != null && wd.getRain().getValue() > 1) {
+
+        if (wd.getRain() != null && wd.getRain().getValue() > 1) {
             return 1;
-        } else if (wd.getWindSpeed().getValue() != null && wd.getWindSpeed().getValue() > 8) {
+        } else if (wd.getWindSpeed() != null && wd.getWindSpeed().getValue() > 8) {
             return 2;
-        } else if (wd.getCloudCoverage().getValue() != null && wd.getCloudCoverage().getValue() > 60) {
+        } else if (wd.getCloudCoverage() != null && wd.getCloudCoverage().getValue() > 60) {
             return 3;
         } else {
             return 4;

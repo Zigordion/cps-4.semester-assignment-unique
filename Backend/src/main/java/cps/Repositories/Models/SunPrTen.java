@@ -11,7 +11,6 @@ public class SunPrTen implements IGraphDataType{
     private Long id;
 
     private Double value;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "sunMin", orphanRemoval = true)
     private WeatherData weatherData;
 }

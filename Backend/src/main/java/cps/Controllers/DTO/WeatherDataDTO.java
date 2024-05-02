@@ -21,14 +21,15 @@ public class WeatherDataDTO {
 
     public WeatherDataDTO(WeatherData weatherData) {
         this.weatherStation = weatherData.getWeatherStation().getStation();
-        this.temperature = weatherData.getTemperature().getValue();
-        this.windSpeed = weatherData.getWindSpeed().getValue();
-        this.windDirection = weatherData.getWindDirection().getValue();
-        this.sunMin = weatherData.getSunMin().getValue();
-        this.cloudCoverage = weatherData.getCloudCoverage().getValue();
-        this.humidity = weatherData.getHumidity().getValue();
-        this.rain = weatherData.getRain().getValue();
-        this.solarRad = weatherData.getSolarRad().getValue();
         this.timestamp = weatherData.getTimestamp();
+        this.temperature = weatherData.getTemperature() != null ? weatherData.getTemperature().getValue() : null;
+        this.windSpeed = weatherData.getWindSpeed() != null ? weatherData.getWindSpeed().getValue() : null;
+        this.windDirection = weatherData.getWindDirection() != null ? weatherData.getWindDirection().getValue() : null;
+        this.sunMin = weatherData.getSunMin() != null ? weatherData.getSunMin().getValue() : null;
+        this.cloudCoverage = weatherData.getCloudCoverage() != null ? weatherData.getCloudCoverage().getValue() : null;
+        this.humidity = weatherData.getHumidity() != null ? weatherData.getHumidity().getValue() : null;
+        this.rain = weatherData.getRain() != null ? weatherData.getRain().getValue() : null;
+        this.solarRad = weatherData.getSolarRad() != null ? weatherData.getSolarRad().getValue() : null;
     }
+
 }

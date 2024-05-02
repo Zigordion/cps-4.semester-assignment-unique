@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import WeatherComponent from './components/WeatherComponent';
@@ -15,6 +15,7 @@ import TimebarComponent from './components/TimebarComponent';
 import { convertWindDirection, convertSunToPercent } from './util/Converter';
 import NavBarComponent from './components/NavBarComponent';
 import GraphComponent from './components/GraphComponent';
+import { weatherData as weatherDataSSE } from './util/SseConsumer';
 
 interface WeatherData{
   id: number;
@@ -29,6 +30,23 @@ interface WeatherData{
   timestamp: string;
 }
 function App() {
+
+  useEffect(()=>{
+    const weatherDataEventSource = weatherDataSSE.subscribeWeatherData(
+      (eventData: WeatherData) => {
+        const {temperature, windDirection, sunMin, cloudCoverage, rain, solarRad, timestamp } = eventData;
+        setWeatherData({
+          temperature,
+          windDirection,
+          sunMin,
+          cloudCoverage,
+          rain,
+          solarRad,
+          timestamp
+        } as WeatherData);
+      }
+    );
+  })
   const [weatherData, setWeatherData] = useState<WeatherData>();
   return (
     <Router>

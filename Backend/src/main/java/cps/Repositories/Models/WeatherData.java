@@ -15,21 +15,29 @@ public class WeatherData {
     @ManyToOne
     @JoinColumn(name = "weather_station_id")
     private WeatherStation weatherStation;
-    @OneToOne(mappedBy = "weatherData")
+    @OneToOne
+    @JoinColumn(name = "temperature_id")
     private Temperature temperature;
-    @OneToOne(mappedBy = "weatherData")
+    @OneToOne
+    @JoinColumn(name = "wind_speed_id")
     private WindSpeed windSpeed;
-    @OneToOne(mappedBy = "weatherData")
+    @OneToOne
+    @JoinColumn(name = "wind_direction_id")
     private WindDirection windDirection;
-    @OneToOne(mappedBy = "weatherData")
+    @OneToOne
+    @JoinColumn(name = "sun_pr_ten_id")
     private SunPrTen sunMin;
-    @OneToOne(mappedBy = "weatherData")
+    @OneToOne
+    @JoinColumn(name = "cloud_coverage_id")
     private CloudCoverage cloudCoverage;
-    @OneToOne(mappedBy = "weatherData")
+    @OneToOne
+    @JoinColumn(name = "humidity_id")
     private Humidity humidity;
-    @OneToOne(mappedBy = "weatherData")
+    @OneToOne
+    @JoinColumn(name = "rain_id")
     private Rain rain;
-    @OneToOne(mappedBy = "weatherData")
+    @OneToOne
+    @JoinColumn(name = "solar_radiation_id")
     private SolarRadiation solarRad;
     private Timestamp timestamp;
 
@@ -38,14 +46,6 @@ public class WeatherData {
         return "WeatherData{" +
                 "id=" + id +
                 ", weatherStation=" + weatherStation.getStation() +
-                ", temperature=" + temperature.getValue() +
-                ", windSpeed=" + windSpeed.getValue() +
-                ", windDirection=" + windDirection.getValue() +
-                ", sunMin=" + sunMin.getValue() +
-                ", cloudCoverage=" + cloudCoverage.getValue() +
-                ", humidity=" + humidity.getValue() +
-                ", rain=" + rain.getValue() +
-                ", solarRad=" + solarRad.getValue() +
                 ", timestamp=" + timestamp +
                 '}';
     }
