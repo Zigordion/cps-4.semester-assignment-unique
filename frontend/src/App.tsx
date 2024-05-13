@@ -61,7 +61,7 @@ function App() {
     return()=>{
       weatherDataEventSource.close();
     }
-  })
+  }, [])
   const [weatherData, setWeatherData] = useState<WeatherData>();
   return (
     <Router>

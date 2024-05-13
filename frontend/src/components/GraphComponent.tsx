@@ -80,8 +80,8 @@ const GraphComponent = () => {
                     },
                 ]}
                 series={seriesData}
-                width={500}
-                height={300}
+                width={1000}
+                height={500}
             />
         </div>
     )

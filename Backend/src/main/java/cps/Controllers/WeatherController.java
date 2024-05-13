@@ -1,6 +1,7 @@
 package cps.Controllers;
 
 import cps.Controllers.DTO.*;
+import cps.Repositories.Models.WeatherData;
 import cps.Services.SSETopic;
 import cps.Services.SseService;
 import cps.Services.Util.DataTypes;
@@ -67,11 +68,26 @@ public class WeatherController {
         }
     }
 
-    @GetMapping("/overall")
-    public OverallWeatherDataDTO getOverallWeather(){
-        OverallWeatherDataDTO overallWeatherDataDTO = new OverallWeatherDataDTO();
-        overallWeatherDataDTO.setWeatherValue(weatherService.calculateOverallWeather());
-        return overallWeatherDataDTO;
+    @GetMapping("/overall/{timestampInput}")
+    public OverallWeatherDataDTO getOverallWeather(@PathVariable String timestampInput){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
+        try {
+            WeatherData weatherData;
+            if(timestampInput.equals("undefined")){
+                weatherData = weatherService.getLatestValueFromDB();
+            }else {
+                Date date = simpleDateFormat.parse(timestampInput);
+                Timestamp timestamp = new Timestamp(date.getTime());
+                weatherData = weatherService.getValueFromTimestamp(timestamp);
+            }
+            OverallWeatherDataDTO overallWeatherDataDTO = new OverallWeatherDataDTO();
+            overallWeatherDataDTO.setWeatherValue(weatherService.calculateOverallWeather(weatherData));
+            return overallWeatherDataDTO;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @GetMapping("/graph/{value}")
@@ -84,7 +100,7 @@ public class WeatherController {
         return weatherGraphService.getData(dataType);
     }
     @GetMapping(path = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribeToEventLog() {
+    public SseEmitter subscribeToWeather() {
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         sseService.addEmitter(SSETopic.WEATHER_DATA, emitter);
         return emitter;

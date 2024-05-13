@@ -20,8 +20,9 @@ const CenterComponent = ({timeData}: CenterComponentProps) => {
         let overallData: number;
         const fetchOverall = async()=>{
             try{
-                const response = await axios.get<OverallWeather>('http://localhost:8020/api/weather/overall')
+                const response = await axios.get<OverallWeather>(`http://localhost:8020/api/weather/overall/${timeData}`)
                 overallData = response.data.weatherValue;
+                console.log(overallData)
             } catch (error){
                 console.error("Error while fetching overall weather data", error);
             }
@@ -40,7 +41,7 @@ const CenterComponent = ({timeData}: CenterComponentProps) => {
             }
         }
         fetchOverall(); 
-    }, [])
+    }, [timeData])
     return (
         <div className='container'>
             <h1 className='title'>Odense<br/>Vejrudsigt</h1>

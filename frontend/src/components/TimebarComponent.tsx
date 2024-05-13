@@ -70,18 +70,20 @@ const TimebarComponent = ( {setWeatherData,timestampMarks, setTimestampMarks}:Ti
         console.error("Error while fetching weather data: ", error);
     }
   }
-
-  useEffect(()=>{
-    const fetchInitialWeatherData = async()=>{
-        try{
+  useEffect(() => {
+    const fetchInitialWeatherData = async () => {
+        try {
             const response = await axios.get('http://localhost:8020/api/weather/')
             const formattedTime = convertTimeDataToReadable(response.data.timestamp);
             response.data.timestamp = formattedTime;
             setWeatherData(response.data);
-        } catch (error){
+        } catch (error) {
             console.error("Error while fetching weather data: ", error);
         }
     }
+    fetchInitialWeatherData();
+}, [setWeatherData]);
+  useEffect(()=>{
     const fetchAllTimeData = async()=>{
       try{
         const response = await axios.get<TimeStamps>('http://localhost:8020/api/weather/time/all')
@@ -99,7 +101,6 @@ const TimebarComponent = ( {setWeatherData,timestampMarks, setTimestampMarks}:Ti
       }
     }
     fetchAllTimeData();
-    fetchInitialWeatherData();
   },  [timestampMarks,setWeatherData, setTimestampMarks]);
   return (
     <div className='barBackground'>

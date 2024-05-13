@@ -37,7 +37,7 @@ public class WeatherService {
     }
 
     @Scheduled(fixedRate = 600_000) //equal  1000 = 1 sec * 60*10 10 min.
-    public void storeValuesInDB() {
+    public void fetchAndStoreValuesInDB() {
         WeatherData latestWeatherData = getLatestValueFromDB();
         WeatherStation weatherStation = weatherStationRepository.findFirstByStation("DMI");
         System.out.println(weatherStation);
@@ -70,8 +70,7 @@ public class WeatherService {
         return weatherDataRepository.findTimestamps();
     }
 
-    public double calculateOverallWeather() {
-        WeatherData wd = getLatestValueFromDB();
+    public double calculateOverallWeather(WeatherData wd) {
         System.out.println(wd.toString());
 
         if (wd.getRain() != null && wd.getRain().getValue() > 1) {
