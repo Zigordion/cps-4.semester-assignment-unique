@@ -3,6 +3,7 @@ package cps.Services;
 import cps.Controllers.DTO.GraphDataDTO;
 import cps.Repositories.Models.WeatherData;
 import cps.Services.Util.DataTypes;
+import cps.Services.Util.SSETopic;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.sql.Timestamp;

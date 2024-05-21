@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 @Component
-public class WeatherDataBuilder {
+class WeatherDataBuilder {
     private WeatherData weatherData = new WeatherData();
     private final TemperatureRepository temperatureRepository;
     private final HumidityRepository humidityRepository;
@@ -16,7 +16,7 @@ public class WeatherDataBuilder {
     private final WindSpeedRepository windSpeedRepository;
     private final WindDirectionRepository windDirectionRepository;
     private final CloudCoverageRepository cloudCoverageRepository;
-    public WeatherDataBuilder(TemperatureRepository temperatureRepository,
+    WeatherDataBuilder(TemperatureRepository temperatureRepository,
                               HumidityRepository humidityRepository,
                               RainRepository rainRepository,
                               SolarRadiationRepository solarRadiationRepository,
@@ -33,7 +33,7 @@ public class WeatherDataBuilder {
         this.windDirectionRepository = windDirectionRepository;
         this.cloudCoverageRepository = cloudCoverageRepository;
     }
-    public WeatherDataBuilder setWindSpeed(Double windSpeed) {
+    WeatherDataBuilder setWindSpeed(Double windSpeed) {
         if(windSpeed == null){
             return this;
         }
@@ -44,7 +44,7 @@ public class WeatherDataBuilder {
         return this;
     }
 
-    public WeatherDataBuilder setTemperature(Double temperature) {
+    WeatherDataBuilder setTemperature(Double temperature) {
         if(temperature == null){
             return this;
         }
@@ -55,7 +55,7 @@ public class WeatherDataBuilder {
         return this;
     }
 
-    public WeatherDataBuilder setWindDirection(Double windDirection) {
+    WeatherDataBuilder setWindDirection(Double windDirection) {
         if(windDirection == null){
             return this;
         }
@@ -66,7 +66,7 @@ public class WeatherDataBuilder {
         return this;
     }
 
-    public WeatherDataBuilder setSunMin(Double sunMin) {
+    WeatherDataBuilder setSunMin(Double sunMin) {
         if(sunMin == null){
             return this;
         }
@@ -77,7 +77,7 @@ public class WeatherDataBuilder {
         return this;
     }
 
-    public WeatherDataBuilder setCloudCoverage(Double cloudCoverage) {
+    WeatherDataBuilder setCloudCoverage(Double cloudCoverage) {
         if(cloudCoverage == null){
             return this;
         }
@@ -88,7 +88,7 @@ public class WeatherDataBuilder {
         return this;
     }
 
-    public WeatherDataBuilder setHumidity(Double humidity) {
+    WeatherDataBuilder setHumidity(Double humidity) {
         if(humidity == null){
             return this;
         }
@@ -99,7 +99,7 @@ public class WeatherDataBuilder {
         return this;
     }
 
-    public WeatherDataBuilder setRain(Double rain) {
+    WeatherDataBuilder setRain(Double rain) {
         if(rain == null){
             return this;
         }
@@ -110,7 +110,7 @@ public class WeatherDataBuilder {
         return this;
     }
 
-    public WeatherDataBuilder setSolarRad(Double solarRad) {
+    WeatherDataBuilder setSolarRad(Double solarRad) {
         if(solarRad == null){
             return this;
         }
@@ -121,17 +121,17 @@ public class WeatherDataBuilder {
         return this;
     }
 
-    public WeatherDataBuilder setTimestamp(Timestamp timestamp) {
+    WeatherDataBuilder setTimestamp(Timestamp timestamp) {
         weatherData.setTimestamp(timestamp);
         return this;
     }
 
-    public WeatherDataBuilder setWeatherStation(WeatherStation weatherStation) {
+    WeatherDataBuilder setWeatherStation(WeatherStation weatherStation) {
         weatherData.setWeatherStation(weatherStation);
         return this;
     }
 
-    public WeatherData build() {
+    WeatherData build() {
         WeatherData constructedWeatherData = weatherData;
         weatherData = new WeatherData();
         return constructedWeatherData;

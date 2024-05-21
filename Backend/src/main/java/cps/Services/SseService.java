@@ -1,5 +1,6 @@
 package cps.Services;
 
+import cps.Services.Util.SSETopic;
 import jakarta.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.Map;
@@ -10,11 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
-public class SseService {
+class SseService {
 
     private final Map<SSETopic, Queue<SseEmitter>> topicEmittersMap = new ConcurrentHashMap<>();
 
-    public void addEmitter(SSETopic topic, SseEmitter emitter) {
+    void addEmitter(SSETopic topic, SseEmitter emitter) {
         topicEmittersMap
                 .computeIfAbsent(topic, k -> new ConcurrentLinkedQueue<>())
                 .add(emitter);
@@ -22,7 +23,7 @@ public class SseService {
         emitter.onTimeout(() -> removeEmitter(topic, emitter));
     }
 
-    public <T> void sendToClients(SSETopic topic, T data) {
+    <T> void sendToClients(SSETopic topic, T data) {
         Queue<SseEmitter> emitters = topicEmittersMap.getOrDefault(topic, new ConcurrentLinkedQueue<>());
         for (SseEmitter emitter : emitters) {
             try {
@@ -45,7 +46,7 @@ public class SseService {
     }
 
     @PreDestroy
-    public void cleanUp() {
+    void cleanUp() {
         // Complete and remove all emitters
         for (Queue<SseEmitter> emitters : topicEmittersMap.values()) {
             for (SseEmitter emitter : emitters) {

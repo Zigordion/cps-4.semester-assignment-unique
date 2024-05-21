@@ -3,6 +3,7 @@ package cps.Services;
 import cps.Controllers.DTO.GraphDataDTO;
 import cps.Repositories.Models.WeatherData;
 import cps.Services.Util.DataTypes;
+import cps.Services.Util.SSETopic;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -10,12 +11,12 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-public class ServiceFacade implements IServiceFacade {
+class ServiceFacade implements IServiceFacade {
     private final WeatherService weatherService;
     private final WeatherGraphService weatherGraphService;
     private final SseService sseService;
 
-    public ServiceFacade(WeatherService weatherService, WeatherGraphService weatherGraphService, SseService sseService) {
+    ServiceFacade(WeatherService weatherService, WeatherGraphService weatherGraphService, SseService sseService) {
         this.weatherService = weatherService;
         this.weatherGraphService = weatherGraphService;
         this.sseService = sseService;

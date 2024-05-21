@@ -3,7 +3,6 @@ package cps.Services;
 import cps.Controllers.DTO.GraphDataDTO;
 import cps.Repositories.*;
 import cps.Repositories.Models.IGraphDataType;
-import cps.Repositories.Models.SolarRadiation;
 import cps.Repositories.Models.WeatherData;
 import cps.Services.Util.DataTypes;
 import cps.Services.Util.Util;
@@ -16,11 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class WeatherGraphService {
-
+class WeatherGraphService {
     private final WeatherDataRepository weatherDataRepository;
-    Map<DataTypes, JpaRepository<?, Long>> dataTypeRepositories = new HashMap<>();
-    public WeatherGraphService(TemperatureRepository temperatureRepository,
+    private final Map<DataTypes, JpaRepository<?, Long>> dataTypeRepositories = new HashMap<>();
+
+    WeatherGraphService(TemperatureRepository temperatureRepository,
                                HumidityRepository humidityRepository,
                                RainRepository rainRepository,
                                SolarRadiationRepository solarRadiationRepository,
@@ -42,7 +41,7 @@ public class WeatherGraphService {
 
     }
 
-    public List<GraphDataDTO> getData(DataTypes dataType) {
+    List<GraphDataDTO> getData(DataTypes dataType) {
         List<IGraphDataType> entities = (List<IGraphDataType>) dataTypeRepositories.get(dataType).findAll();
         List<WeatherData> weatherData = weatherDataRepository.findAll();
         Map<Long, String> timestampMap = new HashMap<>();
@@ -62,9 +61,4 @@ public class WeatherGraphService {
         }
         return graphDataDTOList;
     }
-
-
-
-
-
 }

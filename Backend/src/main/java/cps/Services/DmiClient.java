@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DmiClient implements IApiClient {
+class DmiClient implements IApiClient {
     protected URI uri;
     private final ArrayList<String> parameterIds = new ArrayList<>(List.of(new String[]{
             "precip_past10min",
@@ -26,7 +26,7 @@ public class DmiClient implements IApiClient {
             "cloud_cover",
             "sun_last10min_glob",
             "radia_glob"}));
-    public DmiClient() {
+    DmiClient() {
 
         uri = UriComponentsBuilder.fromUriString("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items")
                 .queryParam("period", "latest-10-minutes")

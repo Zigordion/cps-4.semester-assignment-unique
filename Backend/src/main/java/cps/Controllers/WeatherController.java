@@ -3,7 +3,7 @@ package cps.Controllers;
 import cps.Controllers.DTO.*;
 import cps.Repositories.Models.WeatherData;
 import cps.Services.IServiceFacade;
-import cps.Services.SSETopic;
+import cps.Services.Util.SSETopic;
 import cps.Services.Util.DataTypes;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
