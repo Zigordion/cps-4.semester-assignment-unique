@@ -2,11 +2,9 @@ package cps.Controllers;
 
 import cps.Controllers.DTO.*;
 import cps.Repositories.Models.WeatherData;
+import cps.Services.IServiceFacade;
 import cps.Services.SSETopic;
-import cps.Services.SseService;
 import cps.Services.Util.DataTypes;
-import cps.Services.WeatherGraphService;
-import cps.Services.WeatherService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -20,14 +18,10 @@ import java.util.*;
 @RestController
 @RequestMapping("api/weather")
 public class WeatherController {
-    private final WeatherService weatherService;
-    private final WeatherGraphService weatherGraphService;
-    private final SseService sseService;
+    private final IServiceFacade serviceFacade;
     private final Map<String, DataTypes> dataTypesMap = new HashMap<>();
-    public WeatherController(WeatherService weatherService, WeatherGraphService weatherGraphService, SseService sseService){
-        this.weatherService = weatherService;
-        this.weatherGraphService = weatherGraphService;
-        this.sseService = sseService;
+    public WeatherController(IServiceFacade serviceFacade){
+        this.serviceFacade = serviceFacade;
         dataTypesMap.put("temperature", DataTypes.TEMPERATURE);
         dataTypesMap.put("wind-speed", DataTypes.WIND_SPEED);
         dataTypesMap.put("sunshine", DataTypes.SUN_MIN);
@@ -37,31 +31,31 @@ public class WeatherController {
         dataTypesMap.put("solar-radiation", DataTypes.SOLAR_RADIATION);
     }
     @GetMapping("/time")
-    public DateTimeDTO GetTimeData(){
+    public DateTimeDTO getTimeData(){
         DateTimeDTO dateTimeDTO = new DateTimeDTO();
-        dateTimeDTO.setTimeStamp(weatherService.getDateTime());
+        dateTimeDTO.setTimeStamp(serviceFacade.getLatestDateTime());
         return dateTimeDTO;
     }
 
     @GetMapping("/time/all")
-    public TimeStampsDTO GetAllTimeData(){
+    public TimeStampsDTO getAllTimeData(){
         TimeStampsDTO timeStampsDTO = new TimeStampsDTO();
-        timeStampsDTO.setTimestamps(weatherService.getAllTimestamps());
+        timeStampsDTO.setTimestamps(serviceFacade.getAllTimestamps());
         return timeStampsDTO;
     }
 
     @GetMapping("/")
-    public WeatherDataDTO GetWeatherData(){
-        return new WeatherDataDTO(weatherService.getLatestValueFromDB());
+    public WeatherDataDTO getWeatherData(){
+        return new WeatherDataDTO(serviceFacade.getLatestWeatherDataFromDb());
     }
     @GetMapping("/time/{timestampInput}")
-    public WeatherDataDTO GetWeatherDataSpecific(@PathVariable String timestampInput){
+    public WeatherDataDTO getSpecificWeatherData(@PathVariable String timestampInput){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
         try {
             System.out.println(timestampInput);
             Date date = simpleDateFormat.parse(timestampInput);
             Timestamp timestamp = new Timestamp(date.getTime());
-            return new WeatherDataDTO(weatherService.getValueFromTimestamp(timestamp));
+            return new WeatherDataDTO(serviceFacade.getWeatherDataFromTimestamp(timestamp));
         } catch (ParseException e) {
             e.printStackTrace();
             return null;
@@ -74,14 +68,14 @@ public class WeatherController {
         try {
             WeatherData weatherData;
             if(timestampInput.equals("undefined")){
-                weatherData = weatherService.getLatestValueFromDB();
+                weatherData = serviceFacade.getLatestWeatherDataFromDb();
             }else {
                 Date date = simpleDateFormat.parse(timestampInput);
                 Timestamp timestamp = new Timestamp(date.getTime());
-                weatherData = weatherService.getValueFromTimestamp(timestamp);
+                weatherData = serviceFacade.getWeatherDataFromTimestamp(timestamp);
             }
             OverallWeatherDataDTO overallWeatherDataDTO = new OverallWeatherDataDTO();
-            overallWeatherDataDTO.setWeatherValue(weatherService.calculateOverallWeather(weatherData));
+            overallWeatherDataDTO.setWeatherValue(serviceFacade.calculateOverallWeather(weatherData));
             return overallWeatherDataDTO;
         } catch (ParseException e) {
             e.printStackTrace();
@@ -97,13 +91,11 @@ public class WeatherController {
             System.out.println("ERROR: path variable: "+ value + " not recognized");
             return null;
         }
-        return weatherGraphService.getData(dataType);
+        return serviceFacade.getGraphData(dataType);
     }
     @GetMapping(path = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribeToWeather() {
-        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
-        sseService.addEmitter(SSETopic.WEATHER_DATA, emitter);
-        return emitter;
+        return serviceFacade.listenToTopic(SSETopic.WEATHER_DATA);
     }
 
 }

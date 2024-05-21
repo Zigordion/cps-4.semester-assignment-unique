@@ -53,7 +53,6 @@ public class DmiClient implements IApiClient {
         Timestamp timestamp = Util.getTimestampFromString(time);
         System.out.println(valueMap);
         return weatherDataBuilder
-                .reset()
                 .setRain(valueMap.get("precip_past10min"))
                 .setTemperature(valueMap.get("temp_dry"))
                 .setHumidity(valueMap.get("humidity"))

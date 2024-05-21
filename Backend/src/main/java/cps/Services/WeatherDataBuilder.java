@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 @Component
 public class WeatherDataBuilder {
-    private WeatherData weatherData;
+    private WeatherData weatherData = new WeatherData();
     private final TemperatureRepository temperatureRepository;
     private final HumidityRepository humidityRepository;
     private final RainRepository rainRepository;
@@ -32,10 +32,6 @@ public class WeatherDataBuilder {
         this.windSpeedRepository = windSpeedRepository;
         this.windDirectionRepository = windDirectionRepository;
         this.cloudCoverageRepository = cloudCoverageRepository;
-    }
-    public WeatherDataBuilder reset(){
-        weatherData = new WeatherData();
-        return this;
     }
     public WeatherDataBuilder setWindSpeed(Double windSpeed) {
         if(windSpeed == null){
@@ -136,6 +132,8 @@ public class WeatherDataBuilder {
     }
 
     public WeatherData build() {
-        return weatherData;
+        WeatherData constructedWeatherData = weatherData;
+        weatherData = new WeatherData();
+        return constructedWeatherData;
     }
 }
