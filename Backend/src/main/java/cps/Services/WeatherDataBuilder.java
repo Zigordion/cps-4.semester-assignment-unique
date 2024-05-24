@@ -8,30 +8,9 @@ import java.sql.Timestamp;
 @Component
 class WeatherDataBuilder {
     private WeatherData weatherData = new WeatherData();
-    private final TemperatureRepository temperatureRepository;
-    private final HumidityRepository humidityRepository;
-    private final RainRepository rainRepository;
-    private final SolarRadiationRepository solarRadiationRepository;
-    private final SunMinRepository sunMinRepository;
-    private final WindSpeedRepository windSpeedRepository;
-    private final WindDirectionRepository windDirectionRepository;
-    private final CloudCoverageRepository cloudCoverageRepository;
-    WeatherDataBuilder(TemperatureRepository temperatureRepository,
-                              HumidityRepository humidityRepository,
-                              RainRepository rainRepository,
-                              SolarRadiationRepository solarRadiationRepository,
-                              SunMinRepository sunMinRepository,
-                              WindSpeedRepository windSpeedRepository,
-                              WindDirectionRepository windDirectionRepository,
-                              CloudCoverageRepository cloudCoverageRepository) {
-        this.temperatureRepository = temperatureRepository;
-        this.humidityRepository = humidityRepository;
-        this.rainRepository = rainRepository;
-        this.solarRadiationRepository = solarRadiationRepository;
-        this.sunMinRepository = sunMinRepository;
-        this.windSpeedRepository = windSpeedRepository;
-        this.windDirectionRepository = windDirectionRepository;
-        this.cloudCoverageRepository = cloudCoverageRepository;
+    private final DataBaseService dataBaseService;
+    WeatherDataBuilder(DataBaseService dataBaseService) {
+        this.dataBaseService = dataBaseService;
     }
     WeatherDataBuilder setWindSpeed(Double windSpeed) {
         if(windSpeed == null){
@@ -39,7 +18,7 @@ class WeatherDataBuilder {
         }
         WindSpeed ws = new WindSpeed();
         ws.setValue(windSpeed);
-        windSpeedRepository.save(ws);
+        dataBaseService.save(ws);
         weatherData.setWindSpeed(ws);
         return this;
     }
@@ -50,7 +29,7 @@ class WeatherDataBuilder {
         }
         Temperature temp = new Temperature();
         temp.setValue(temperature);
-        temperatureRepository.save(temp);
+        dataBaseService.save(temp);
         weatherData.setTemperature(temp);
         return this;
     }
@@ -61,7 +40,7 @@ class WeatherDataBuilder {
         }
         WindDirection wd = new WindDirection();
         wd.setValue(windDirection);
-        windDirectionRepository.save(wd);
+        dataBaseService.save(wd);
         weatherData.setWindDirection(wd);
         return this;
     }
@@ -72,7 +51,7 @@ class WeatherDataBuilder {
         }
         SunPrTen sm = new SunPrTen();
         sm.setValue(sunMin);
-        sunMinRepository.save(sm);
+        dataBaseService.save(sm);
         weatherData.setSunMin(sm);
         return this;
     }
@@ -83,7 +62,7 @@ class WeatherDataBuilder {
         }
         CloudCoverage cc = new CloudCoverage();
         cc.setValue(cloudCoverage);
-        cloudCoverageRepository.save(cc);
+        dataBaseService.save(cc);
         weatherData.setCloudCoverage(cc);
         return this;
     }
@@ -94,7 +73,7 @@ class WeatherDataBuilder {
         }
         Humidity h = new Humidity();
         h.setValue(humidity);
-        humidityRepository.save(h);
+        dataBaseService.save(h);
         weatherData.setHumidity(h);
         return this;
     }
@@ -105,7 +84,7 @@ class WeatherDataBuilder {
         }
         Rain r = new Rain();
         r.setValue(rain);
-        rainRepository.save(r);
+        dataBaseService.save(r);
         weatherData.setRain(r);
         return this;
     }
@@ -116,7 +95,7 @@ class WeatherDataBuilder {
         }
         SolarRadiation sr = new SolarRadiation();
         sr.setValue(solarRad);
-        solarRadiationRepository.save(sr);
+        dataBaseService.save(sr);
         weatherData.setSolarRad(sr);
         return this;
     }

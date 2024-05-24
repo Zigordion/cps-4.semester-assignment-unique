@@ -14,17 +14,20 @@ import java.util.List;
 class ServiceFacade implements IServiceFacade {
     private final WeatherService weatherService;
     private final WeatherGraphService weatherGraphService;
+    private final DataBaseService dataBaseService;
     private final SseService sseService;
 
-    ServiceFacade(WeatherService weatherService, WeatherGraphService weatherGraphService, SseService sseService) {
+    ServiceFacade(WeatherService weatherService, WeatherGraphService weatherGraphService, DataBaseService dataBaseService, SseService sseService) {
         this.weatherService = weatherService;
         this.weatherGraphService = weatherGraphService;
+        this.dataBaseService = dataBaseService;
+
         this.sseService = sseService;
     }
 
     @Override
     public Timestamp[] getAllTimestamps() {
-        return weatherService.getAllTimestamps();
+        return dataBaseService.getAllTimestamps();
     }
 
     @Override
@@ -34,12 +37,12 @@ class ServiceFacade implements IServiceFacade {
 
     @Override
     public WeatherData getLatestWeatherDataFromDb() {
-        return weatherService.getLatestValueFromDB();
+        return dataBaseService.getLatestValueFromDB();
     }
 
     @Override
     public WeatherData getWeatherDataFromTimestamp(Timestamp timestamp) {
-        return weatherService.getValueFromTimestamp(timestamp);
+        return dataBaseService.getValueFromTimestamp(timestamp);
     }
 
     @Override

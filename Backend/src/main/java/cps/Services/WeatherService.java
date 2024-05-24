@@ -18,58 +18,41 @@ import java.util.*;
 
 @Service
 class WeatherService {
-    private final WeatherDataRepository weatherDataRepository;
-    private final WeatherStationRepository weatherStationRepository;
+    private final DataBaseService dataBaseService;
     private final WeatherDataBuilder weatherDataBuilder;
     private final SseService sseService;
 
     private final IApiClient IApiClient;
 
-    WeatherService(WeatherDataRepository weatherDataRepository, WeatherStationRepository weatherStationRepository, WeatherDataBuilder weatherDataBuilder, SseService sseService) {
-        this.weatherDataRepository = weatherDataRepository;
-        this.weatherStationRepository = weatherStationRepository;
+    WeatherService(DataBaseService dataBaseService, WeatherDataBuilder weatherDataBuilder, SseService sseService) {
+        this.dataBaseService = dataBaseService;
         this.weatherDataBuilder = weatherDataBuilder;
         this.sseService = sseService;
         IApiClient = new DmiClient();
-        //alternatively use a data seeder/SQL
-        if (weatherStationRepository.count() == 0) {
-            WeatherStation weatherStation = new WeatherStation();
-            weatherStation.setStation(WeatherStations.DMI.name());
-            weatherStationRepository.save(weatherStation);
-        }
     }
 
     @Scheduled(fixedRate = 600_000) //equal  1000 = 1 sec * 60*10 10 min.
     void fetchAndStoreValuesInDB() {
-        WeatherData latestWeatherData = getLatestValueFromDB();
-        WeatherStation weatherStation = weatherStationRepository.findFirstByStation(WeatherStations.DMI.name());
-        System.out.println(weatherStation);
+        WeatherData latestWeatherData = dataBaseService.getLatestValueFromDB();
+        WeatherStation weatherStation = dataBaseService.getWeatherStationFromName(WeatherStations.DMI.name());
         WeatherData weatherData = IApiClient.constructWeatherData(weatherDataBuilder, weatherStation);
         Timestamp timestamp = weatherData.getTimestamp();
         if (latestWeatherData != null && timestamp.equals(latestWeatherData.getTimestamp())) {
             System.out.println("Already exists in db; skipping");
             return;
         }
-        weatherDataRepository.save(weatherData);
+        dataBaseService.save(weatherData);
         sseService.sendToClients(SSETopic.WEATHER_DATA,new WeatherDataDTO(weatherData));
     }
 
-    WeatherData getLatestValueFromDB() {
-        return weatherDataRepository.findFirstByTimestampLessThanEqualOrderByTimestampDesc(Timestamp.valueOf(LocalDateTime.now()));
-    }
 
-    WeatherData getValueFromTimestamp(Timestamp timestamp) {
-        return weatherDataRepository.findFirstByTimestampLessThanEqualOrderByTimestampDesc(timestamp);
-    }
 
     String getDateTime() {
-        Timestamp ts = getLatestValueFromDB().getTimestamp();
+        Timestamp ts = dataBaseService.getLatestValueFromDB().getTimestamp();
         return Util.getDateTime(ts);
     }
 
-    Timestamp[] getAllTimestamps() {
-        return weatherDataRepository.findTimestamps();
-    }
+
 
     double calculateOverallWeather(WeatherData wd) {
         if (wd.getRain() != null && wd.getRain().getValue() > 1) {
